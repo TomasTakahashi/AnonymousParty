@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "962193344067",
+    "project_id": "anonymous-party-f09b8",
+    "storage_bucket": "anonymous-party-f09b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962193344067:android:c7445681098f0943bf76f6",
+        "android_client_info": {
+          "package_name": "com.taka.anonymousparty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962193344067-oq94gbag8dd5pmm83pmc72op4udosv5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhJPK70NJ6STdNjBpg_J8UcjojQ4aryEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962193344067-oq94gbag8dd5pmm83pmc72op4udosv5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

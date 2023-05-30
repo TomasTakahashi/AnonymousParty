@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.AnonymousParty" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/grey</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
+</resources>
