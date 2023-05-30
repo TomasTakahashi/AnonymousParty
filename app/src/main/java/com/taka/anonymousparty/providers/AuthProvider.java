@@ -45,4 +45,10 @@ public class AuthProvider {
             return null;
         }
     }
+
+    public void logout(){
+        if(mAuth == null){
+            mAuth.signOut();
+        }
+    }
 }

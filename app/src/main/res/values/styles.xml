@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/contrast</item>
+        <item name="background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/contrast</item>
+    </style>
+    
+</resources>
