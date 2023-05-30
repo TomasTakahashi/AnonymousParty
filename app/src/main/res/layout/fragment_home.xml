@@ -16,7 +16,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="15dp"
         android:src="@drawable/ic_newchat"
-        app:backgroundTint="@color/colorSecondary"
-        app:tint="@color/contrast"/>
+        app:tint="@color/contrast"
+        app:backgroundTint="@color/colorSecondary"/>
 
 </FrameLayout>
