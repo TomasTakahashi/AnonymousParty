@@ -182,20 +182,27 @@ public class MainActivity extends AppCompatActivity {
     private void login() {
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
-        mDialog.show();
-        mAuthProvider.login(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                mDialog.dismiss();
-                if (task.isSuccessful()){
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
+
+        if (!email.equals("") && !password.equals("")) {
+            mDialog.show();
+            mAuthProvider.login(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    mDialog.dismiss();
+                    if (task.isSuccessful()){
+                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, "Email o contraseña incorrectos.", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(MainActivity.this, "Email o contraseña incorrectos.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+            });
+        }
+        else {
+            Toast.makeText(this, "Complete email y password", Toast.LENGTH_SHORT).show();
+        }
         Log.d("CAMPO", "email " + email);
         Log.d("CAMPO", "password " + password);
     }

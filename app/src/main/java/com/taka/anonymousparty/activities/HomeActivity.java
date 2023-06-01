@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.fragments.HomeFragment;
+import com.taka.anonymousparty.fragments.ProfileFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
