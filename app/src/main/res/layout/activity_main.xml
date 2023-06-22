@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
@@ -24,13 +23,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/black"/>
+                android:theme="@style/ShapeView"/>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:src="@drawable/opticdev_gray"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                app:tint="?attr/colorAccent"/>
 
 
         </io.github.florent37.shapeofview.shapes.DiagonalView>
@@ -58,9 +58,9 @@
                     android:id="@+id/textInputEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Correo electronico"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/white"/>
+                    android:theme="@style/TextInputEditText"
+                    android:hint="Email address"
+                    android:inputType="textEmailAddress"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,9 +89,9 @@
                     android:id="@+id/textInputPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword"
-                    android:textColor="@color/white"/>
+                    android:theme="@style/TextInputEditText"
+                    android:hint="Password"
+                    android:inputType="textPassword"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,11 +101,11 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="INICIAR SESION"
+            android:text="Log in"
             android:layout_marginTop="40dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:backgroundTint="@color/black"
+            android:textColor="?attr/colorAccent"
             android:background="@drawable/rounded_button"/>
         
         <com.google.android.gms.common.SignInButton
@@ -129,14 +129,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No tienes cuenta?"
+            android:text="Don't have an account?"
             android:textSize="17sp"/>
 
         <TextView
             android:id="@+id/textViewRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="REGISTRATE AQUI"
+            android:text="SIGN UP"
             android:textSize="17sp"
             android:textStyle="bold"
             android:layout_marginLeft="5dp"/>

@@ -1,5 +1,9 @@
 package com.taka.anonymousparty.models;
 
+import com.google.firebase.firestore.CollectionReference;
+
+import java.util.ArrayList;
+
 public class User {
 
     private String id;
@@ -10,7 +14,7 @@ public class User {
 
     }
 
-    public User(String id, String email, String username) {
+    public User(String id, String email, String username, ArrayList<String> idsUserChat) {
         this.id = id;
         this.email = email;
         this.username = username;

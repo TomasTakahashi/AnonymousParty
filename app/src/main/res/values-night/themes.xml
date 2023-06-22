@@ -2,8 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.AnonymousParty" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryVariant">@color/grey</item>
+        <item name="colorPrimary">@color/colorPrimaryNight</item>
+        <item name="colorSecondary">@color/colorSecondaryNight</item>
+        <item name="background">@color/BackgroundNight</item>
+        <item name="android:windowBackground">@color/BackgroundNight</item>
+        <item name="colorAccent">@color/contrastNight</item>
+        <item name="android:textColor">@color/contrastNight</item>
+        <item name="tint">@color/contrastNight</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 </resources>

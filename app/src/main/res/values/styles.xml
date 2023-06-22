@@ -2,9 +2,18 @@
 <resources>
 
     <style name="Toolbar" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/contrast</item>
-        <item name="background">@color/colorPrimary</item>
-        <item name="titleTextColor">@color/contrast</item>
+        <item name="colorControlNormal">?attr/contrast</item>
+        <item name="titleTextColor">?attr/contrast</item>
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
-    
+
+    <style name="TextInputEditText">
+        <item name="android:background">@null</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="ShapeView">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
 </resources>

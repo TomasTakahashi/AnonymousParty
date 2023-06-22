@@ -22,11 +22,14 @@ import com.taka.anonymousparty.models.User;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -39,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     AuthProvider mAuthProvider;
     UsersProvider mUsersProvider;
     AlertDialog mDialog;
+    CircleImageView mCircleImageViewBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         mTextInputPassword = findViewById(R.id.textInputPassword);
         mTextInputConfirmPassword = findViewById(R.id.textInputConfirmPassword);
         mButtonRegister = findViewById(R.id.btnRegister);
+        mCircleImageViewBack = findViewById(R.id.circleImageBack);
 
         mAuthProvider = new AuthProvider();
         mUsersProvider = new UsersProvider();
@@ -63,6 +68,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 register();
+            }
+        });
+
+        mCircleImageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
