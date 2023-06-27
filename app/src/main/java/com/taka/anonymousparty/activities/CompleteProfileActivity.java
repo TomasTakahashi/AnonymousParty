@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,10 +44,15 @@ public class CompleteProfileActivity extends AppCompatActivity {
         mAuthProvider = new AuthProvider();
         mUsersProvider = new UsersProvider();
 
+
+        mTextInputUserName.setText("Anónimo");
+
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
-                .setMessage("Espere un momento")
-                .setCancelable(false).build();
+                .setMessage("Wait a moment")
+                .setCancelable(false)
+                .setTheme(R.style.CustomSpotsDialog)
+                .build();
 
         mButtonRegister.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -60,7 +66,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
         String username = mTextInputUserName.getText().toString();
 
         if (username.isEmpty()) {
-            Toast.makeText(this, "Para continuar ingrese un nombre de usuario.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "To continue enter a username.", Toast.LENGTH_LONG).show();
         }
         else{
             updateUser(username);
@@ -79,10 +85,11 @@ public class CompleteProfileActivity extends AppCompatActivity {
                 mDialog.dismiss();
                 if (task.isSuccessful()){
                     Intent intent = new Intent(CompleteProfileActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(CompleteProfileActivity.this, "No se pudo almacenar el usuario en la base de datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CompleteProfileActivity.this, "Failed to store user in database", Toast.LENGTH_SHORT).show();
                 }
             }
         });

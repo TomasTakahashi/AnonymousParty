@@ -2,12 +2,12 @@
 <resources>
     <color name="BackgroundNight">#222121</color>
     <color name="colorPrimaryNight">#FF000000</color>
-    <color name="colorSecondaryNight">#222121</color>
+    <color name="colorSecondaryNight">#151414</color>
     <color name="contrastNight">#FFFFFFFF</color>
 
     <color name="BackgroundLight">#E3E0E0</color>
     <color name="colorPrimaryLight">#FFFFFFFF</color>
-    <color name="colorSecondaryLight">#FF000000</color>
+    <color name="colorSecondaryLight">#B5B3B3</color>
     <color name="contrastLight">#FF000000</color>
 
     <color name="red">#FF0000</color>

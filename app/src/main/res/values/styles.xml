@@ -16,4 +16,13 @@
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
+    <style name="CustomSpotsDialog" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:colorBackground">?attr/colorPrimary</item>
+        <item name="DialogSpotColor">?attr/colorAccent</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="DialogSpotCount">4</item>
+    </style>
+
+
 </resources>

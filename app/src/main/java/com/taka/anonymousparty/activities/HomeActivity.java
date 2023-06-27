@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import dmax.dialog.SpotsDialog;
+
 
 public class HomeActivity extends AppCompatActivity {
     FloatingActionButton mFab;
@@ -46,9 +49,10 @@ public class HomeActivity extends AppCompatActivity {
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
     TokenProvider mTokenProvider;
-    ChatsAdapter mAdapter;
+    ChatsAdapter mChatsAdapter;
     RecyclerView mRecyclerView;
     ChatsProvider mChatsProvider;
+    AlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +81,21 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        mDialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setMessage("Wait a moment")
+                .setCancelable(false)
+                .setTheme(R.style.CustomSpotsDialog)
+                .build();
+
         Query query = mChatsProvider.getAll(mAuthProvider.getUid());
         FirestoreRecyclerOptions<Chat> options =
                 new FirestoreRecyclerOptions.Builder<Chat>()
                         .setQuery(query, Chat.class)
                         .build();
-        mAdapter = new ChatsAdapter(options, this);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.startListening();
+        mChatsAdapter = new ChatsAdapter(options, this);
+        mRecyclerView.setAdapter(mChatsAdapter);
+        mChatsAdapter.startListening();
     }
 
     @Override
@@ -112,6 +123,7 @@ public class HomeActivity extends AppCompatActivity {
     private int attemptCount = 0;
 
     private void goToNewChat() {
+        mDialog.show();
         String myId = mAuthProvider.getUid();
         CollectionReference mCollectionUsers = FirebaseFirestore.getInstance().collection("Users");
 
@@ -120,7 +132,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void getRandomUserAndCheckChatExists(String myId, CollectionReference collectionUsers) {
         if (attemptCount >= MAX_ATTEMPTS) {
-            Toast.makeText(HomeActivity.this, "No hay usuarios disponibles", Toast.LENGTH_SHORT).show();
+            mDialog.dismiss();
+            Toast.makeText(HomeActivity.this, "No users available", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -133,13 +146,11 @@ public class HomeActivity extends AppCompatActivity {
                         public void onChatExists(boolean exists) {
                             if (!exists && !myId.equals(randomUserId)) {
                                 // El chat no existe y los id no son iguales
-                                Toast.makeText(HomeActivity.this, "CHAT CREADO", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
                                 intent.putExtra("idUser1", myId);
                                 intent.putExtra("idUser2", randomUserId);
                                 intent.putExtra("idChat", myId + randomUserId);
-                                Log.d("RANDOM USER-----------", randomUserId);
-
+                                mDialog.dismiss();
                                 createChat(myId, randomUserId);
                                 startActivity(intent);
                                 return;
@@ -152,12 +163,14 @@ public class HomeActivity extends AppCompatActivity {
                     });
                 } else {
                     // Manejo de errores cuando ocurre un fallo
-                    Toast.makeText(HomeActivity.this, "No es posible crear chat en este momento", Toast.LENGTH_SHORT).show();
+                    mDialog.dismiss();
+                    Toast.makeText(HomeActivity.this, "It is not possible to create a chat at this time", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
         });
     }
+
     private void createChat(String idUser1, String idUser2) {
         Chat chat = new Chat();
         chat.setIdUser1(idUser1);
@@ -172,7 +185,6 @@ public class HomeActivity extends AppCompatActivity {
         chat.setIdsUsers(idsUsers);
         mChatsProvider.create(chat);
     }
-
 
     private void logout() {
         mAuthProvider.logout();

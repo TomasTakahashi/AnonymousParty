@@ -91,7 +91,4 @@ public class UsersProvider {
         return taskCompletionSource.getTask();
     }
 
-
-
-
 }

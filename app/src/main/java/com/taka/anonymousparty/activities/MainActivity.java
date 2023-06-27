@@ -71,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
-                .setMessage("Espere un momento")
-                .setCancelable(false).build();
+                .setMessage("Wait a moment")
+                .setCancelable(false)
+                .setTheme(R.style.CustomSpotsDialog)
+                .build();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 if (documentSnapshot.exists()){
                     mDialog.dismiss();
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
                 else{
@@ -199,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     else{
-                        Toast.makeText(MainActivity.this, "Email o contraseña incorrectos.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Wrong email or password.", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -207,7 +210,5 @@ public class MainActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, "Complete email y password", Toast.LENGTH_SHORT).show();
         }
-        Log.d("CAMPO", "email " + email);
-        Log.d("CAMPO", "password " + password);
     }
 }

@@ -15,11 +15,13 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.models.Chat;
 import com.taka.anonymousparty.providers.AuthProvider;
+import com.taka.anonymousparty.providers.MessagesProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 
 import de.hdodenhof.circleimageview.CircleImageView;

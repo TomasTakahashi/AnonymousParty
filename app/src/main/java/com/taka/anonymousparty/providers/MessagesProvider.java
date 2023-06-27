@@ -4,7 +4,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.taka.anonymousparty.models.Message;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MessagesProvider {
 
@@ -18,6 +22,20 @@ public class MessagesProvider {
         DocumentReference document = mCollection.document();
         message.setIdMessage(document.getId());
         return document.set(message);
+    }
+
+    public Query getMessageByChat(String idChat){
+        return mCollection.whereEqualTo("idChat", idChat).orderBy("timestamp", Query.Direction.ASCENDING);
+    }
+
+    public Query getMessagesByChatAndSender(String idChat, String idSender) {
+        return mCollection.whereEqualTo("idChat", idChat).whereEqualTo("userIdSender", idSender).whereEqualTo("viewed", false);
+    }
+
+    public Task<Void> updateViewed(String idDocument, boolean state) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("viewed", state);
+        return mCollection.document(idDocument).update(map);
     }
 
 }
