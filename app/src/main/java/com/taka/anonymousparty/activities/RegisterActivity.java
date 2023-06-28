@@ -24,6 +24,7 @@ import com.taka.anonymousparty.providers.UsersProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -114,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                     newUser.setId(autoId);
                     newUser.setEmail(email);
                     newUser.setUsername(username);
+                    newUser.setTimestamp(new Date().getTime());
 
                     mUsersProvider.create(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +24,7 @@ import com.taka.anonymousparty.activities.HomeActivity;
 import com.taka.anonymousparty.models.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,14 +49,27 @@ public class UsersProvider {
         return mCollectionUsers.document(userId).get();
     }
 
+    public DocumentReference getUserRealTime(String userId) {
+        return mCollectionUsers.document(userId);
+    }
+
     public Task<Void> create(User user) {
         return mCollectionUsers.document(user.getId()).set(user);
     }
 
-    public Task<Void> update(User user){
-        Map<String, Object> mapUserInfo = new HashMap<>();
-        mapUserInfo.put("username", user.getUsername());
-        return mCollectionUsers.document(user.getId()).update(mapUserInfo);
+    public Task<Void> update(User user) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", user.getUsername());
+        map.put("timestamp", new Date().getTime());
+        //map.put("image_profile", user.getImageProfile());
+        return mCollectionUsers.document(user.getId()).update(map);
+    }
+
+    public Task<Void> updateOnline(String idUser, boolean status) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("online", status);
+        map.put("lastConnection", new Date().getTime());
+        return mCollectionUsers.document(idUser).update(map);
     }
 
     public Task<Void> getRandomUser(CollectionReference mCollectionUsers) {

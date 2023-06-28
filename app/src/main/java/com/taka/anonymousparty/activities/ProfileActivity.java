@@ -26,6 +26,7 @@ import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.models.User;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
+import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
 import java.io.File;
 
@@ -124,6 +125,18 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ViewedMessageHelper.updateOnline(true, ProfileActivity.this);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ViewedMessageHelper.updateOnline(false, ProfileActivity.this);
     }
 
     private void getUserInfo(){

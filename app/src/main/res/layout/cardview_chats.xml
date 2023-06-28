@@ -41,12 +41,35 @@
                 android:id="@+id/textViewLastMessageChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mensaje"
+                android:text=""
                 android:maxLines="1"
                 android:textSize="14dp"
                 android:layout_marginTop="3dp"/>
 
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayoutMessageNotRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/circular_view"/>
+            
+            <TextView
+                android:id="@+id/textViewMessageNotRead"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text=""
+                android:textAlignment="center"
+                android:layout_gravity="center"/>
+                
+
+
+        </FrameLayout>
 
 
     </LinearLayout>

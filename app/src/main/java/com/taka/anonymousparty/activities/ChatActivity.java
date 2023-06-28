@@ -1,6 +1,7 @@
 package com.taka.anonymousparty.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +23,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -33,6 +37,8 @@ import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.MessagesProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
+import com.taka.anonymousparty.utils.RelativeTime;
+import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +68,8 @@ public class ChatActivity extends AppCompatActivity {
     RecyclerView mRecyclerViewMessage;
 
     LinearLayoutManager mLinearLayoutManager;
+
+    ListenerRegistration mListener;
 
 
 
@@ -103,6 +111,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+        ViewedMessageHelper.updateOnline(true, ChatActivity.this);
         if (mExtraIdChat != null){
             if (!mExtraIdChat.isEmpty()){
                 getMessageChat();
@@ -117,6 +126,21 @@ public class ChatActivity extends AppCompatActivity {
     public void onStop(){
         super.onStop();
         mMessagesAdapter.stopListening();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ViewedMessageHelper.updateOnline(false, ChatActivity.this);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if (mListener != null){
+            mListener.remove();
+        }
+
     }
 
     public void getMessageChat(){
@@ -170,24 +194,36 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getUserInfo() {
         String idUserInfo = "";
-        if (mAuthProvider.getUid().equals(mExtraIdUser1)){
+        if (mAuthProvider.getUid().equals(mExtraIdUser1)) {
             idUserInfo = mExtraIdUser2;
         }
-        else{
+        else {
             idUserInfo = mExtraIdUser1;
         }
-        mUsersProvider.getUser(idUserInfo).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+        mListener = mUsersProvider.getUserRealTime(idUserInfo).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    if (documentSnapshot.contains("username")){
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.contains("username")) {
                         String username = documentSnapshot.getString("username");
                         mTextViewUsername.setText(username);
                     }
-//                    if (documentSnapshot.contains("image_profile")){
-//                        String username = documentSnapshot.getString("image_profile");
-//                        if (imageProfile != null){
-//                            if (!imageProfile.equals(""){
+                    if (documentSnapshot.contains("online")) {
+                        boolean online = documentSnapshot.getBoolean("online");
+                        if (online) {
+                            mTextViewRelativeTime.setText("En linea");
+                        }
+                        else if (documentSnapshot.contains("lastConnect")) {
+                            long lastConnect = documentSnapshot.getLong("lastConnection");
+                            String relativeTime = RelativeTime.getTimeAgo(lastConnect, ChatActivity.this);
+                            mTextViewRelativeTime.setText(relativeTime);
+                        }
+                    }
+//                    if (documentSnapshot.contains("image_profile")) {
+//                        String imageProfile = documentSnapshot.getString("image_profile");
+//                        if (imageProfile != null) {
+//                            if (!imageProfile.equals("")) {
 //                                Picasso.with(ChatActivity.this).load(imageProfile).into(mCircleImageProfile);
 //                            }
 //                        }

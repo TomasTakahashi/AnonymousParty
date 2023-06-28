@@ -21,6 +21,7 @@ import com.taka.anonymousparty.models.User;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,8 @@ public class CompleteProfileActivity extends AppCompatActivity {
         User user = new User();
         user.setId(id);
         user.setUsername(username);
+        user.setTimestamp(new Date().getTime());
+
         mDialog.show();
         mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

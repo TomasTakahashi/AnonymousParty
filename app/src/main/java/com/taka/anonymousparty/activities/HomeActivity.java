@@ -34,6 +34,7 @@ import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.TokenProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 import com.taka.anonymousparty.providers.ChatsProvider.ChatExistsCallback;
+import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -49,9 +50,9 @@ public class HomeActivity extends AppCompatActivity {
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
     TokenProvider mTokenProvider;
+    ChatsProvider mChatsProvider;
     ChatsAdapter mChatsAdapter;
     RecyclerView mRecyclerView;
-    ChatsProvider mChatsProvider;
     AlertDialog mDialog;
 
     @Override
@@ -96,6 +97,25 @@ public class HomeActivity extends AppCompatActivity {
         mChatsAdapter = new ChatsAdapter(options, this);
         mRecyclerView.setAdapter(mChatsAdapter);
         mChatsAdapter.startListening();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        ViewedMessageHelper.updateOnline(true, HomeActivity.this);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        ViewedMessageHelper.updateOnline(false, HomeActivity.this);
+    }
+
+    protected void onDestroy(){
+        super.onDestroy();
+        if (mChatsAdapter.getListener() != null){
+            mChatsAdapter.getListener().remove();
+        }
     }
 
     @Override
