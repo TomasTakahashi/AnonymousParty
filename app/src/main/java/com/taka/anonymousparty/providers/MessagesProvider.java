@@ -14,17 +14,17 @@ public class MessagesProvider {
 
     CollectionReference mCollection;
 
-    public MessagesProvider(){
+    public MessagesProvider() {
         mCollection = FirebaseFirestore.getInstance().collection("Messages");
     }
 
-    public Task<Void> create(Message message){
+    public Task<Void> create(Message message) {
         DocumentReference document = mCollection.document();
         message.setIdMessage(document.getId());
         return document.set(message);
     }
 
-    public Query getMessageByChat(String idChat){
+    public Query getMessageByChat(String idChat) {
         return mCollection.whereEqualTo("idChat", idChat).orderBy("timestamp", Query.Direction.ASCENDING);
     }
 
@@ -32,8 +32,21 @@ public class MessagesProvider {
         return mCollection.whereEqualTo("idChat", idChat).whereEqualTo("userIdSender", idSender).whereEqualTo("viewed", false);
     }
 
+    public Query getLastThreeMessagesByChatAndSender(String idChat, String idSender) {
+        return mCollection
+                .whereEqualTo("idChat", idChat)
+                .whereEqualTo("userIdSender", idSender)
+                .whereEqualTo("viewed", false)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(3);
+    }
+
     public Query getLastMessage(String idChat) {
         return mCollection.whereEqualTo("idChat", idChat).orderBy("timestamp", Query.Direction.DESCENDING).limit(1);
+    }
+
+    public Query getLastMessageSender(String idChat, String idSender) {
+        return mCollection.whereEqualTo("idChat", idChat).whereEqualTo("userIdSender", idSender).orderBy("timestamp", Query.Direction.DESCENDING).limit(1);
     }
 
     public Task<Void> updateViewed(String idDocument, boolean state) {

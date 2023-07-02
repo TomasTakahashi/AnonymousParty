@@ -9,23 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.adapters.ChatsAdapter;
 import com.taka.anonymousparty.models.Chat;
@@ -36,10 +31,9 @@ import com.taka.anonymousparty.providers.UsersProvider;
 import com.taka.anonymousparty.providers.ChatsProvider.ChatExistsCallback;
 import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import dmax.dialog.SpotsDialog;
 
@@ -54,6 +48,8 @@ public class HomeActivity extends AppCompatActivity {
     ChatsAdapter mChatsAdapter;
     RecyclerView mRecyclerView;
     AlertDialog mDialog;
+
+    int mIdNotificationChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,12 +162,14 @@ public class HomeActivity extends AppCompatActivity {
                         public void onChatExists(boolean exists) {
                             if (!exists && !myId.equals(randomUserId)) {
                                 // El chat no existe y los id no son iguales
+                                createChat(myId, randomUserId);
                                 Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
                                 intent.putExtra("idUser1", myId);
                                 intent.putExtra("idUser2", randomUserId);
                                 intent.putExtra("idChat", myId + randomUserId);
+                                intent.putExtra("idNotificationChat", mIdNotificationChat);
+
                                 mDialog.dismiss();
-                                createChat(myId, randomUserId);
                                 startActivity(intent);
                                 return;
                             } else {
@@ -198,6 +196,9 @@ public class HomeActivity extends AppCompatActivity {
         chat.setWriting(false);
         chat.setTimestamp(new Date().getTime());
         chat.setIdChat(idUser1 + idUser2);
+        Random random = new Random();
+        mIdNotificationChat = random.nextInt(1000000);
+        chat.setIdNotificationChat(mIdNotificationChat);
 
         ArrayList<String> idsUsers = new ArrayList<>();
         idsUsers.add(idUser1);
