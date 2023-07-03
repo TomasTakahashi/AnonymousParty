@@ -317,32 +317,21 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void getLastThreeMessages(final Message message, final String token) {
-        Log.d("GET LAST THREE MESSAGES", "DENTRO DE LA FUNCION");
-        Log.d("ID SENDER", message.getUserIdSender());
-        Log.d("ID RECEIVER", message.getUserIdReceiver());
-        Log.d("MENSAJE", message.getMessage());
-        Log.d("ID CHAT", message.getIdChat());
-        Log.d("ID MENSAJE", message.getIdMessage());
-        Log.d("TIMESTAMP", String.valueOf(message.getTimestamp()));
-        Log.d("VIEWED", String.valueOf(message.isViewed()));
 
         mMessagesProvider.getLastThreeMessagesByChatAndSender(mExtraIdChat, mAuthProvider.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 ArrayList<Message> messageArrayList = new ArrayList<>();
-                Log.d("GET LAST THREE MESSAGES", "ENTRO AL ON SUCCESS");
 
                 for (DocumentSnapshot d: queryDocumentSnapshots.getDocuments()) {
                     if (d.exists()) {
                         Message message = d.toObject(Message.class);
                         messageArrayList.add(message);
-                        Log.d("GET LAST THREE MESSAGES", "EL DOCUMENTO EXISTE");
                     }
                 }
 
                 if (messageArrayList.size() == 0) {
                     messageArrayList.add(message);
-                    Log.d("GET LAST THREE MESSAGES", "EL ARRAY ES IGUAL A CERO");
                 }
 
                 Collections.reverse(messageArrayList);
@@ -351,7 +340,6 @@ public class ChatActivity extends AppCompatActivity {
                 String messages = gson.toJson(messageArrayList);
 
                 sendNotification(token, messages, message);
-                Log.d("GET LAST THREE MESSAGES", "SE LLAMO A SEND NOTIFICATION");
             }
         });
     }
@@ -363,7 +351,11 @@ public class ChatActivity extends AppCompatActivity {
         data.put("idNotification", String.valueOf(mIdNotificationChat));
         data.put("messages", messages);
         data.put("usernameSender", mMyUsername.toUpperCase());
+        data.put("userIdSender", message.getUserIdSender());
         data.put("usernameReceiver", mUsernameReceiver.toUpperCase());
+        data.put("userIdReceiver", message.getUserIdReceiver());
+        data.put("idChat", message.getIdChat());
+
 
 
         String idSender = "";

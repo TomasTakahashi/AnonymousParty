@@ -14,7 +14,7 @@
     <io.github.florent37.shapeofview.shapes.DiagonalView
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:elevation="4dp"
+        android:elevation="8dp"
         app:shape_diagonal_angle="10"
         app:shape_diagonal_position="bottom">
 
