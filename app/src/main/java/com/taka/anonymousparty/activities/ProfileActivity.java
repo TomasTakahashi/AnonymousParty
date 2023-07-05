@@ -118,25 +118,38 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //Botón Back
         mCircleImageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
+        mUsersProvider.updateOnline(true, ProfileActivity.this);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        ViewedMessageHelper.updateOnline(true, ProfileActivity.this);
+        mUsersProvider.updateOnline(true, ProfileActivity.this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        //mUsersProvider.updateOnline(false, ProfileActivity.this);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        ViewedMessageHelper.updateOnline(false, ProfileActivity.this);
+        mUsersProvider.updateOnline(false, ProfileActivity.this);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        //mUsersProvider.updateOnline(false, ProfileActivity.this);
     }
 
     private void getUserInfo(){

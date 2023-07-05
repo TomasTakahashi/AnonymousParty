@@ -36,7 +36,7 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         String title = data.get("title");
         String body = data.get("body");
         if (title != null) {
-            if (title.equals("NUEVO MENSAJE")) {
+            if (title.equals("New message")) {
                 showNotificationMessage(data);
             }
             else {
@@ -60,7 +60,6 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         String userIdSender = data.get("userIdSender");
         String usernameReceiver = data.get("usernameReceiver");
         String userIdReceiver = data.get("userIdReceiver");
-        String lastMessage = data.get("lastMessage");
         String messagesJSON = data.get("messages");
         String idChat = data.get("idChat");
         int idNotification = Integer.parseInt(data.get("idNotification"));
@@ -74,11 +73,11 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         intent.putExtra("usernameReceiver", usernameReceiver);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
-        RemoteInput remoteInput = new RemoteInput.Builder(NOTIFICATION_REPLY).setLabel("Tu mensaje...").build();
+        RemoteInput remoteInput = new RemoteInput.Builder(NOTIFICATION_REPLY).setLabel("Your message...").build();
 
         final NotificationCompat.Action action = new NotificationCompat.Action.Builder(
                 R.mipmap.ic_launcher,
-                "Responder",
+                "REPLY",
                 pendingIntent)
                 .addRemoteInput(remoteInput)
                 .build();
@@ -92,7 +91,6 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
                         messages,
                         usernameSender,
                         usernameReceiver,
-                        lastMessage,
                         action
                 );
         notificationHelper.getManager().notify(idNotification, builder.build());

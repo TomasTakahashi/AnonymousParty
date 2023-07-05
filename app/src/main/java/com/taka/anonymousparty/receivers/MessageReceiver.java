@@ -117,11 +117,11 @@ public class MessageReceiver extends BroadcastReceiver {
 
     private void sendNotification(final String token, String messages, Message message) {
         final Map<String, String> data = new HashMap<>();
-        data.put("title", "NUEVO MENSAJE");
+        data.put("title", "New message");
         data.put("body", message.getMessage());
         data.put("idNotification", String.valueOf(mExtraIdNotification));
         data.put("messages", messages);
-        data.put("usernameSender", mExtraUserIdReceiver.toUpperCase());
+        data.put("usernameSender", mExtraUsernameReceiver.toUpperCase());
         data.put("userIdSender", message.getUserIdSender());
         data.put("usernameReceiver", mExtraUsernameSender.toUpperCase());
         data.put("userIdReceiver", message.getUserIdReceiver());

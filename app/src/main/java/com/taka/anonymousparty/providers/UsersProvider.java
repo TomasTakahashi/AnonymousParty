@@ -2,6 +2,7 @@ package com.taka.anonymousparty.providers;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +14,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -22,6 +28,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.activities.HomeActivity;
 import com.taka.anonymousparty.models.User;
+
+
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,7 +74,15 @@ public class UsersProvider {
         return mCollectionUsers.document(user.getId()).update(map);
     }
 
-    public Task<Void> updateOnline(String idUser, boolean status) {
+    public static void updateOnline(boolean status, final Context context){
+        Log.d("UPDATE ONLINE", "UPDATE ONLINE Context " + context.toString());
+        Log.d("UPDATE ONLINE", "UPDATE ONLINE STATUS " + status);
+        UsersProvider usersProvider = new UsersProvider();
+        AuthProvider authProvider = new AuthProvider();
+        usersProvider.TaskupdateOnline(authProvider.getUid(), status);
+    }
+
+    public Task<Void> TaskupdateOnline(String idUser, boolean status) {
         Map<String, Object> map = new HashMap<>();
         map.put("online", status);
         map.put("lastConnection", new Date().getTime());

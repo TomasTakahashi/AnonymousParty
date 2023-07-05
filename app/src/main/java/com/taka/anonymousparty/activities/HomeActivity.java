@@ -18,6 +18,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -93,22 +95,32 @@ public class HomeActivity extends AppCompatActivity {
         mChatsAdapter = new ChatsAdapter(options, this);
         mRecyclerView.setAdapter(mChatsAdapter);
         mChatsAdapter.startListening();
+
+        mUsersProvider.updateOnline(true, HomeActivity.this);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        ViewedMessageHelper.updateOnline(true, HomeActivity.this);
+        mUsersProvider.updateOnline(true, HomeActivity.this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        //mUsersProvider.updateOnline(false, HomeActivity.this);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        ViewedMessageHelper.updateOnline(false, HomeActivity.this);
+        mUsersProvider.updateOnline(false, HomeActivity.this);
     }
 
+    @Override
     protected void onDestroy(){
         super.onDestroy();
+        mUsersProvider.updateOnline(false, HomeActivity.this);
         if (mChatsAdapter.getListener() != null){
             mChatsAdapter.getListener().remove();
         }
