@@ -10,9 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -117,6 +123,46 @@ public class ChatActivity extends AppCompatActivity {
 
         showCustomToolbar(R.layout.custom_chat_toolbar);
         getMyInfoUser();
+
+        mEditTextMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int lineCount = mEditTextMessage.getLineCount();
+                int maxLines = 6; // Máximo de 6 líneas permitidas
+                mEditTextMessage.setMaxLines(Math.min(lineCount, maxLines));
+            }
+        });
+
+        mEditTextMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // Ocultar el teclado después de presionar Enter o Done
+                if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mEditTextMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Si pierde el foco y no hay texto, establecer una línea como máximo
+                if (!hasFocus && mEditTextMessage.getText().toString().isEmpty()) {
+                    mEditTextMessage.setLines(1);
+                }
+            }
+        });
 
         mImageViewSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,7 +334,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        String textMessage = mEditTextMessage.getText().toString();
+        String textMessage = mEditTextMessage.getText().toString().trim();
         if (!textMessage.isEmpty()){
             final Message message = new Message();
             if (mAuthProvider.getUid().equals(mExtraIdUser1)){
@@ -309,6 +355,7 @@ public class ChatActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
                         mEditTextMessage.setText("");
+                        mEditTextMessage.clearFocus();
                         mMessagesAdapter.notifyDataSetChanged();
                         getToken(message);
                     }
@@ -366,14 +413,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                 if (response.body() != null) {
                     if (response.body().getSuccess() == 1) {
-                        Toast.makeText(ChatActivity.this, "La notificacion se envio correcatemente", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(ChatActivity.this, "La notificacion no se pudo enviar", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    Toast.makeText(ChatActivity.this, "La notificacion no se pudo enviar", Toast.LENGTH_SHORT).show();
                 }
             }
 
