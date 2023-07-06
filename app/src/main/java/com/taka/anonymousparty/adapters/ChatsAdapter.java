@@ -76,6 +76,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             idSender = chat.getIdUser1();
         }
         getMessageNotRead(chatId, idSender, holder.textViewMessageNotRead, holder.mFrameLayoutMessageNotRead);
+
     }
 
     private void getLastMessage(String chatId, TextView textViewLastMessage) {
