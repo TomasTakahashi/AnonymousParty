@@ -27,6 +27,7 @@ import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.MessagesProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
+import com.taka.anonymousparty.utils.RelativeTime;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -68,6 +69,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         });
 
         getLastMessage(chatId, holder.textViewLastMessage);
+        getDateLastMessage(chatId, holder.textViewDateLastMessage);
         String idSender = "";
         if (mAuthProvider.getUid().equals(chat.getIdUser1())){
             idSender = chat.getIdUser2();
@@ -87,6 +89,20 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 if (size > 0){
                     String lastMessage = queryDocumentSnapshots.getDocuments().get(0).getString("message");
                     textViewLastMessage.setText(lastMessage);
+                }
+            }
+        });
+    }
+
+    private void getDateLastMessage(String chatId, TextView textViewDateLastMessage) {
+        mMessagesProvider.getLastMessage(chatId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                int size = queryDocumentSnapshots.size();
+                if (size > 0){
+                    Long DateLastMessage = queryDocumentSnapshots.getDocuments().get(0).getLong("timestamp");
+                    String relativeTime = RelativeTime.timeFormatAMPM(DateLastMessage, context);
+                    textViewDateLastMessage.setText(relativeTime);
                 }
             }
         });
@@ -156,6 +172,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewUsername;
         TextView textViewLastMessage;
+        TextView textViewDateLastMessage;
         TextView textViewMessageNotRead;
         CircleImageView circleImageChat;
         FrameLayout mFrameLayoutMessageNotRead;
@@ -165,6 +182,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             super(view);
             textViewUsername = view.findViewById(R.id.textViewUsernameChat);
             textViewLastMessage = view.findViewById(R.id.textViewLastMessageChat);
+            textViewDateLastMessage = view.findViewById(R.id.textViewDateLastMessage);
             textViewMessageNotRead = view.findViewById(R.id.textViewMessageNotRead);
             circleImageChat = view.findViewById(R.id.circleImageChat);
             mFrameLayoutMessageNotRead = view.findViewById(R.id.frameLayoutMessageNotRead);
