@@ -32,7 +32,7 @@ public class ChatsProvider {
     }
 
     public Query getAll(String idUser){
-        return mCollectionChats.whereArrayContains("idsUsers", idUser).orderBy("lastMessageTime", Query.Direction.DESCENDING);
+        return mCollectionChats.whereArrayContains("idsUsers", idUser);
     }
 
     public Query getChatByUser1AndUser2(String idUser1, String idUser2){
@@ -40,6 +40,10 @@ public class ChatsProvider {
         idChats.add(idUser1 + idUser2);
         idChats.add(idUser2 + idUser1);
         return mCollectionChats.whereIn("idChat", idChats);
+    }
+
+    public Query getLastDateMessage(String idChat) {
+        return mCollectionChats.whereEqualTo("idChat", idChat);
     }
 
     public interface ChatExistsCallback {
