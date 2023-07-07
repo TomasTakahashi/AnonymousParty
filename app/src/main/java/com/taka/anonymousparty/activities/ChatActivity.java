@@ -334,10 +334,6 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void updateLastMessageTime(long timestamp){
-        mChatsProvider.updateLastMessageTime(mExtraIdChat, timestamp);
-    }
-
     private void sendMessage() {
         String textMessage = mEditTextMessage.getText().toString().trim();
         if (!textMessage.isEmpty()){
@@ -364,7 +360,7 @@ public class ChatActivity extends AppCompatActivity {
                         mMessagesAdapter.notifyDataSetChanged();
                         getToken(message);
                         mEditTextMessage.requestFocus();
-                        updateLastMessageTime(message.getTimestamp());
+                        mChatsProvider.updateLastMessageTime(mExtraIdChat, message.getTimestamp());
                     }
                     else{
                         Toast.makeText(ChatActivity.this, "It is not possible to send the message", Toast.LENGTH_SHORT).show();

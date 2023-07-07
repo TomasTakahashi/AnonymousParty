@@ -90,22 +90,23 @@ public class HomeActivity extends AppCompatActivity {
                 .setTheme(R.style.CustomSpotsDialog)
                 .build();
 
-        Query query = mChatsProvider.getAll(mAuthProvider.getUid());
-        FirestoreRecyclerOptions<Chat> options =
-                new FirestoreRecyclerOptions.Builder<Chat>()
-                        .setQuery(query, Chat.class)
-                        .build();
-        mChatsAdapter = new ChatsAdapter(options, this);
-        mRecyclerView.setAdapter(mChatsAdapter);
-        mChatsAdapter.startListening();
-
         mUsersProvider.updateOnline(true, HomeActivity.this);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
+
         mUsersProvider.updateOnline(true, HomeActivity.this);
+
+        Query query = mChatsProvider.getAll(mAuthProvider.getUid());
+        FirestoreRecyclerOptions<Chat> options =
+                new FirestoreRecyclerOptions.Builder<Chat>()
+                        .setQuery(query, Chat.class)
+                        .build();
+        mChatsAdapter = new ChatsAdapter(options, HomeActivity.this);
+        mRecyclerView.setAdapter(mChatsAdapter);
+        mChatsAdapter.startListening();
     }
 
     @Override
@@ -207,6 +208,7 @@ public class HomeActivity extends AppCompatActivity {
         chat.setIdUser2(idUser2);
         chat.setWriting(false);
         chat.setTimestamp(new Date().getTime());
+        chat.setLastMessageTime(chat.getTimestamp());
         chat.setIdChat(idUser1 + idUser2);
         Random random = new Random();
         mIdNotificationChat = random.nextInt(1000000);

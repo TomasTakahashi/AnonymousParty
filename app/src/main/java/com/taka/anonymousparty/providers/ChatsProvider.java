@@ -61,11 +61,20 @@ public class ChatsProvider {
         });
     }
 
-    public Task<Void> updateLastMessageTime(String idChat, long timestamp) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("lastMessageTime", timestamp);
-        return mCollectionChats.document(idChat).update(map);
+    public void updateLastMessageTime(String chatId, long timestamp) {
+        mCollectionChats.document(chatId)
+                .update("lastMessageTime", timestamp)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ChatsProvider", "Last message time updated successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("ChatsProvider", "Failed to update last message time", e);
+                    }
+                });
     }
-
-
 }
