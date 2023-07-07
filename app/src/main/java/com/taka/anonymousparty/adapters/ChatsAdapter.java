@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.models.Chat;
+import com.taka.anonymousparty.models.Message;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.MessagesProvider;
@@ -67,9 +68,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 goToChatActivity(chatId, chat.getIdUser1(), chat.getIdUser2(), chat.getIdNotificationChat());
             }
         });
-
-        getLastMessage(chatId, holder.textViewLastMessage);
-        getDateLastMessage(chatId, holder.textViewDateLastMessage);
         String idSender = "";
         if (mAuthProvider.getUid().equals(chat.getIdUser1())){
             idSender = chat.getIdUser2();
@@ -77,39 +75,33 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         else{
             idSender = chat.getIdUser1();
         }
+
+        getLastMessageAndDate(chatId, holder.textViewLastMessage, holder.textViewDateLastMessage);
         getMessageNotRead(chatId, idSender, holder.textViewMessageNotRead, holder.mFrameLayoutMessageNotRead);
 
     }
 
-    private void getLastMessage(String chatId, TextView textViewLastMessage) {
-        mMessagesProvider.getLastMessage(chatId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                int size = queryDocumentSnapshots.size();
-                if (size > 0){
-                    String lastMessage = queryDocumentSnapshots.getDocuments().get(0).getString("message");
-                    textViewLastMessage.setText(lastMessage);
-                }
-            }
-        });
-    }
-
-    private void getDateLastMessage(String chatId, TextView textViewDateLastMessage) {
-        mMessagesProvider.getLastMessage(chatId).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                int size = queryDocumentSnapshots.size();
-                if (size > 0){
-                    Long DateLastMessage = queryDocumentSnapshots.getDocuments().get(0).getLong("timestamp");
-                    String relativeTime = RelativeTime.timeFormatAMPM(DateLastMessage, context);
-                    textViewDateLastMessage.setText(relativeTime);
-                }
-            }
-        });
-    }
-
     public ListenerRegistration getListener(){
         return mListener;
+    }
+    private void getLastMessageAndDate(String chatId, TextView textViewLastMessage, TextView textViewDateLastMessage) {
+        mListener = mMessagesProvider.getLastMessage(chatId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            Message lastMessage = queryDocumentSnapshots.getDocuments().get(0).toObject(Message.class);
+                            if (lastMessage != null) {
+                                String messageText = lastMessage.getMessage();
+                                Long timestamp = lastMessage.getTimestamp();
+
+                                textViewLastMessage.setText(messageText);
+                                String relativeTime = RelativeTime.timeFormatAMPM(timestamp, context);
+                                textViewDateLastMessage.setText(relativeTime);
+                            }
+                        }
+                    }
+                });
     }
 
     private void getMessageNotRead(String chatId, String idSender, TextView textViewMessageNotRead, FrameLayout mFrameLayoutMessageNotRead) {
