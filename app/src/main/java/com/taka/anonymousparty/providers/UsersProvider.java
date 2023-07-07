@@ -75,8 +75,6 @@ public class UsersProvider {
     }
 
     public static void updateOnline(boolean status, final Context context){
-        Log.d("UPDATE ONLINE", "UPDATE ONLINE Context " + context.toString());
-        Log.d("UPDATE ONLINE", "UPDATE ONLINE STATUS " + status);
         UsersProvider usersProvider = new UsersProvider();
         AuthProvider authProvider = new AuthProvider();
         usersProvider.TaskupdateOnline(authProvider.getUid(), status);

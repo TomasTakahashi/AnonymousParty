@@ -16,6 +16,8 @@ import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.models.Chat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatsProvider {
 
@@ -30,7 +32,7 @@ public class ChatsProvider {
     }
 
     public Query getAll(String idUser){
-        return mCollectionChats.whereArrayContains("idsUsers", idUser);
+        return mCollectionChats.whereArrayContains("idsUsers", idUser).orderBy("lastMessageTime", Query.Direction.DESCENDING);
     }
 
     public Query getChatByUser1AndUser2(String idUser1, String idUser2){
@@ -57,6 +59,12 @@ public class ChatsProvider {
                 callback.onChatExists(false);
             }
         });
+    }
+
+    public Task<Void> updateLastMessageTime(String idChat, long timestamp) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("lastMessageTime", timestamp);
+        return mCollectionChats.document(idChat).update(map);
     }
 
 

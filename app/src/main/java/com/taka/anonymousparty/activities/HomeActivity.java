@@ -51,6 +51,9 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     AlertDialog mDialog;
 
+    private static final int MAX_ATTEMPTS = 30;
+    private int attemptCount = 0;
+
     int mIdNotificationChat;
 
     @Override
@@ -146,9 +149,6 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
         startActivity(intent);
     }
-
-    private static final int MAX_ATTEMPTS = 30;
-    private int attemptCount = 0;
 
     private void goToNewChat() {
         mDialog.show();

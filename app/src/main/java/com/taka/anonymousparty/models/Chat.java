@@ -9,6 +9,7 @@ public class Chat {
     private String idUser2;
     private boolean isWriting;
     private long timestamp;
+    private long lastMessageTime;
     private ArrayList<String> idsUsers;
     private int idNotificationChat;
 
@@ -80,5 +81,13 @@ public class Chat {
 
     public void setIdNotificationChat(int idNotificationChat) {
         this.idNotificationChat = idNotificationChat;
+    }
+
+    public long getLastMessageTime() {
+        return lastMessageTime;
+    }
+
+    public void setLastMessageTime(long lastMessageTime) {
+        this.lastMessageTime = lastMessageTime;
     }
 }
