@@ -47,9 +47,9 @@
                 android:maxLines="50"
                 android:minLines="1"
                 android:padding="10dp"
+                android:layout_marginTop="10dp"
                 android:scrollbars="vertical"
-                android:scrollbarSize="4dp"
-                android:layout_marginTop="10dp"/>
+                android:scrollbarSize="4dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewSendMessage"

@@ -21,6 +21,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,25 +99,32 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_chat);
+
         mAuthProvider = new AuthProvider();
         mUsersProvider = new UsersProvider();
         mChatsProvider = new ChatsProvider();
         mMessagesProvider = new MessagesProvider();
         mNotificationProvider = new NotificationProvider();
         mTokenProvider = new TokenProvider();
+
         mEditTextMessage = findViewById(R.id.editTextMessage);
         mImageViewSendMessage = findViewById(R.id.imageViewSendMessage);
         mRecyclerViewMessage = findViewById(R.id.recyclerViewMessage);
+
         mLinearLayoutManager = new LinearLayoutManager(ChatActivity.this);
         mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerViewMessage.setLayoutManager(mLinearLayoutManager);
+
         mExtraIdUser1 = getIntent().getStringExtra("idUser1");
         mExtraIdUser2 = getIntent().getStringExtra("idUser2");
         mExtraIdChat = getIntent().getStringExtra("idChat");
         mIdNotificationChat = getIntent().getIntExtra("idNotificationChat", -1);
+
         showCustomToolbar(R.layout.custom_chat_toolbar);
         getMyInfoUser();
+
         mEditTextMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -133,6 +141,7 @@ public class ChatActivity extends AppCompatActivity {
                 mEditTextMessage.setMaxLines(Math.min(lineCount, maxLines));
             }
         });
+
         mEditTextMessage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -145,6 +154,7 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         mEditTextMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -154,12 +164,14 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+
         mImageViewSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage();
             }
         });
+
         mUsersProvider.updateOnline(true, ChatActivity.this);
     }
 
@@ -214,12 +226,14 @@ public class ChatActivity extends AppCompatActivity {
         mTextViewUsername = mActionBarView.findViewById(R.id.textViewUsername);
         mTextViewRelativeTime = mActionBarView.findViewById(R.id.textViewRelativeTime);
         mImageViewBack = mActionBarView.findViewById(R.id.imageViewBack);
+
         mImageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
         getUserInfo();
     }
 
@@ -345,6 +359,7 @@ public class ChatActivity extends AppCompatActivity {
                         mEditTextMessage.clearFocus();
                         mMessagesAdapter.notifyDataSetChanged();
                         getToken(message);
+                        mEditTextMessage.requestFocus();
                     }
                     else{
                         Toast.makeText(ChatActivity.this, "It is not possible to send the message", Toast.LENGTH_SHORT).show();
