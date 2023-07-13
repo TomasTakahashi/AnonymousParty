@@ -32,7 +32,8 @@ public class ChatsProvider {
     }
 
     public Query getAll(String idUser){
-        return mCollectionChats.whereArrayContains("idsUsers", idUser);
+//        return mCollectionChats.whereArrayContains("idsUsers", idUser);
+        return mCollectionChats.whereArrayContains("idsUsers", idUser).orderBy("lastMessageTime", Query.Direction.DESCENDING);
     }
 
     public Query getChatByUser1AndUser2(String idUser1, String idUser2){

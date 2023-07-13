@@ -100,6 +100,7 @@ public class HomeActivity extends AppCompatActivity {
         mUsersProvider.updateOnline(true, HomeActivity.this);
 
         Query query = mChatsProvider.getAll(mAuthProvider.getUid());
+//        Query query = mChatsProvider.getAll(mAuthProvider.getUid()).orderBy("lastMessageTime", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Chat> options =
                 new FirestoreRecyclerOptions.Builder<Chat>()
                         .setQuery(query, Chat.class)
