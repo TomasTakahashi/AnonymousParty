@@ -107,18 +107,18 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     private void getDateLastMessage(String chatId, TextView textViewDateLastMessage){
         mListener = mChatsProvider.getLastDateMessage(chatId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                    Chat chat = queryDocumentSnapshots.getDocuments().get(0).toObject(Chat.class);
-                    if (chat != null) {
-                        Long timestamp = chat.getLastMessageTime();
-                        String relativeTime = RelativeTime.timeFormatAMPM(timestamp, context);
-                        textViewDateLastMessage.setText(relativeTime);
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            Chat chat = queryDocumentSnapshots.getDocuments().get(0).toObject(Chat.class);
+                            if (chat != null) {
+                                Long timestamp = chat.getLastMessageTime();
+                                String relativeTime = RelativeTime.timeFormatAMPM(timestamp, context);
+                                textViewDateLastMessage.setText(relativeTime);
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     private void getMessageNotRead(String chatId, String idSender, TextView textViewMessageNotRead, FrameLayout mFrameLayoutMessageNotRead) {
@@ -158,13 +158,13 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                         holder.textViewUsername.setText(username.toUpperCase());
                     }
                     //if (documentSnapshot.contains("image_profile")) {
-                        //String imageProfile = documentSnapshot.getString("image_profile");
-                        //if (imageProfile != null) {
-                            //if (!imageProfile.isEmpty()) {
-                                //Picasso.get().load(imageProfile).into(holder.circleImageChat);
-                                //Picasso.with(context).load(imageProfile).into(holder.circleImageChat);
-                            //}
-                        //}
+                    //String imageProfile = documentSnapshot.getString("image_profile");
+                    //if (imageProfile != null) {
+                    //if (!imageProfile.isEmpty()) {
+                    //Picasso.get().load(imageProfile).into(holder.circleImageChat);
+                    //Picasso.with(context).load(imageProfile).into(holder.circleImageChat);
+                    //}
+                    //}
                     //}
                 }
             }

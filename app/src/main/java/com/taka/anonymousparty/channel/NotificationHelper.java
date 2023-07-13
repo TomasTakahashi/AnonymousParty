@@ -63,20 +63,60 @@ public class NotificationHelper extends ContextWrapper{
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 
-    public NotificationCompat.Builder getNotificationMessage(Message[] messages, String usernameSender, String usernameReceiver, NotificationCompat.Action action) {
-        Person receiver = new Person.Builder()
-                .setName(usernameSender)
-                .setIcon(IconCompat.createWithResource(getApplicationContext(), R.mipmap.ic_launcher))
-                .build();
+    public NotificationCompat.Builder getNotificationMessage(
+            Message[] messages,
+            String usernameSender,
+            String usernameReceiver,
+            String lastMessage,
+//            Bitmap bitmapSender,
+//            Bitmap bitmapReceiver,
+            NotificationCompat.Action action) {
 
-        NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(receiver);
+        Person person1 = null;
+//        if (bitmapReceiver == null) {
+//            person1 = new Person.Builder()
+//                    .setName(usernameReceiver)
+//                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.drawable.ic_person_grey))
+//                    .build();
+//        }
+//        else {
+            person1 = new Person.Builder()
+                    .setName(usernameReceiver)
+//                    .setIcon(IconCompat.createWithBitmap(bitmapReceiver))
+                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.mipmap.ic_launcher))
+                    .build();
+//        }
+
+        Person person2 = null;
+
+//        if (bitmapSender == null) {
+//            person2 = new Person.Builder()
+//                    .setName(usernameSender)
+//                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.drawable.ic_person_grey))
+//                    .build();
+//        }
+//        else {
+            person2 = new Person.Builder()
+                    .setName(usernameSender)
+//                    .setIcon(IconCompat.createWithBitmap(bitmapSender))
+                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.mipmap.ic_launcher))
+                    .build();
+//        }
+
+        NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(person1);
+        NotificationCompat.MessagingStyle.Message message1 = new
+                NotificationCompat.MessagingStyle.Message(
+                lastMessage,
+                new Date().getTime(),
+                person1);
+        messagingStyle.addMessage(message1);
 
         for (Message m: messages) {
             NotificationCompat.MessagingStyle.Message message2 = new
                     NotificationCompat.MessagingStyle.Message(
                     m.getMessage(),
                     m.getTimestamp(),
-                    receiver);
+                    person2);
             messagingStyle.addMessage(message2);
         }
 
@@ -86,3 +126,4 @@ public class NotificationHelper extends ContextWrapper{
                 .addAction(action);
     }
 }
+

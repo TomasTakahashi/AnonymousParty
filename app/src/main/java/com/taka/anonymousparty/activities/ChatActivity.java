@@ -390,6 +390,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 Collections.reverse(messageArrayList);
 
+                if (messageArrayList.size() == 3) {
+                    Message oldestMessage = messageArrayList.get(0);
+                    oldestMessage.setMessage("..."); // Cambia el mensaje más viejo por "..."
+                }
+
                 Gson gson = new Gson();
                 String messages = gson.toJson(messageArrayList);
 

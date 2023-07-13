@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.taka.anonymousparty.models.FCMBody;
 import com.taka.anonymousparty.models.FCMResponse;
 import com.taka.anonymousparty.models.Message;
+import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.MessagesProvider;
 import com.taka.anonymousparty.providers.NotificationProvider;
 import com.taka.anonymousparty.providers.TokenProvider;
@@ -44,20 +45,25 @@ public class MessageReceiver extends BroadcastReceiver {
     int mExtraIdNotification;
 
     TokenProvider mTokenProvider;
-
     NotificationProvider mNotificationProvider;
+    ChatsProvider mChatsProvider;
+    MessagesProvider mMessagesProvider;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        mTokenProvider = new TokenProvider();
+        mNotificationProvider = new NotificationProvider();
+        mChatsProvider = new ChatsProvider();
+        mMessagesProvider = new MessagesProvider();
+
         mExtraUserIdSender = intent.getExtras().getString("userIdSender");
         mExtraUserIdReceiver = intent.getExtras().getString("userIdReceiver");
         mExtraUsernameSender = intent.getExtras().getString("usernameSender");
         mExtraUsernameReceiver = intent.getExtras().getString("usernameReceiver");
         mExtraIdChat = intent.getExtras().getString("idChat");
+//        mExtraImageSender = intent.getExtras().getString("imageSender");
+//        mExtraImageReceiver = intent.getExtras().getString("imageReceiver");
         mExtraIdNotification = intent.getExtras().getInt("idNotification");
-
-        mTokenProvider = new TokenProvider();
-        mNotificationProvider = new NotificationProvider();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(mExtraIdNotification);
@@ -70,15 +76,14 @@ public class MessageReceiver extends BroadcastReceiver {
     private void sendMessage(String textMessage) {
         final Message message = new Message();
 
+        message.setIdChat(mExtraIdChat);
         message.setUserIdSender(mExtraUserIdReceiver);
         message.setUserIdReceiver(mExtraUserIdSender);
         message.setTimestamp(new Date().getTime());
         message.setViewed(false);
-        message.setIdChat(mExtraIdChat);
         message.setMessage(textMessage);
 
         MessagesProvider messagesProvider = new MessagesProvider();
-
         messagesProvider.create(message).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -109,6 +114,9 @@ public class MessageReceiver extends BroadcastReceiver {
                         messageArrayList.add(message);
                         String messages = gson.toJson(messageArrayList);
                         sendNotification(token, messages, message);
+
+                        mChatsProvider.updateLastMessageTime(mExtraIdChat, message.getTimestamp());
+                        updateViewed();
                     }
                 }
             }
@@ -122,10 +130,12 @@ public class MessageReceiver extends BroadcastReceiver {
         data.put("idNotification", String.valueOf(mExtraIdNotification));
         data.put("messages", messages);
         data.put("usernameSender", mExtraUsernameReceiver.toUpperCase());
-        data.put("userIdSender", message.getUserIdSender());
         data.put("usernameReceiver", mExtraUsernameSender.toUpperCase());
+        data.put("userIdSender", message.getUserIdSender());
         data.put("userIdReceiver", message.getUserIdReceiver());
         data.put("idChat", message.getIdChat());
+//        data.put("imageSender", mExtraImageReceiver);
+//        data.put("imageReceiver", mExtraImageSender);
 
         FCMBody body = new FCMBody(token, "high", "4500s", data);
         mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {
@@ -137,6 +147,17 @@ public class MessageReceiver extends BroadcastReceiver {
             @Override
             public void onFailure(Call<FCMResponse> call, Throwable t) {
                 Log.d("ERROR ONFAILURE", "Error al enviar la notificación: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateViewed(){
+        mMessagesProvider.getMessagesByChatAndSender(mExtraIdChat, mExtraUserIdSender).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    mMessagesProvider.updateViewed(document.getId(), true);
+                }
             }
         });
     }
