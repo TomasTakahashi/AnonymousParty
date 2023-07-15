@@ -10,5 +10,6 @@
     <color name="colorSecondaryLight">#B5B3B3</color>
     <color name="contrastLight">#FF000000</color>
 
+    <color name="black">#FF000000</color>
     <color name="red">#FF0000</color>
 </resources>
