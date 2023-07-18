@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -301,14 +302,14 @@ public class ChatActivity extends AppCompatActivity {
                             mTextViewRelativeTime.setText(relativeTime);
                         }
                     }
-//                    if (documentSnapshot.contains("image_profile")) {
-//                        String imageProfile = documentSnapshot.getString("image_profile");
-//                        if (imageProfile != null) {
-//                            if (!imageProfile.equals("")) {
-//                                Picasso.with(ChatActivity.this).load(imageProfile).into(mCircleImageProfile);
-//                            }
-//                        }
-//                    }
+                    if (documentSnapshot.contains("imageProfile")) {
+                        String imageProfile = documentSnapshot.getString("imageProfile");
+                        if (imageProfile != null) {
+                            if (!imageProfile.equals("")) {
+                                Glide.with(ChatActivity.this).load(imageProfile).into(mCircleImageProfile);
+                            }
+                        }
+                    }
                 }
             }
         });
