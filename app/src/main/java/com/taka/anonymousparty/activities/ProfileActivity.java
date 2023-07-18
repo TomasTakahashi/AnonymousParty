@@ -1,6 +1,9 @@
 package com.taka.anonymousparty.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -119,12 +123,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        mCircleImageChangePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, ImageGridActivity.class);
-                startActivity(intent);
-            }
+        mCircleImageChangePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, ImageGridActivity.class);
+            imageGridLauncher.launch(intent);
         });
 
         mCircleImageViewBack.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +161,19 @@ public class ProfileActivity extends AppCompatActivity {
         super.onDestroy();
         //mUsersProvider.updateOnline(false, ProfileActivity.this);
     }
+
+    private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    if (result.getData() != null) {
+                        String imageUrl = result.getData().getStringExtra("selected_image_url");
+                        // Utiliza Glide o cualquier otra biblioteca para cargar la imagen en mCircleImageViewProfile
+                        Glide.with(this).load(imageUrl).into(mCircleImageViewProfile);
+                    }
+                }
+            }
+    );
 
     private void getUserInfo(){
         mUsersProvider.getUser(mAuthProvider.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

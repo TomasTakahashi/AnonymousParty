@@ -1,6 +1,8 @@
 package com.taka.anonymousparty.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,19 @@ public class ImageAdapter extends BaseAdapter {
         }
         ImageView gridImage = view.findViewById(R.id.gridImage);
         Glide.with(context).load(dataList.get(i).getImageURL()).into(gridImage);
+
+        gridImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedImageUrl = dataList.get(i).getImageURL();
+                Intent intent = new Intent();
+                intent.putExtra("selected_image_url", selectedImageUrl);
+                ((Activity) context).setResult(Activity.RESULT_OK, intent);
+                ((Activity) context).finish(); // Finaliza la actividad para volver a ProfileActivity
+            }
+        });
+
+
         return view;
     }
 }

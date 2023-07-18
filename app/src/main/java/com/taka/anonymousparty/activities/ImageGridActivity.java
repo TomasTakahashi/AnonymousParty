@@ -51,7 +51,6 @@ public class ImageGridActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Image dataClass = dataSnapshot.getValue(Image.class);
                     dataList.add(dataClass);
-                    Log.d("URL----------", dataClass.getImageURL());
                 }
                 adapter.notifyDataSetChanged();
             }
