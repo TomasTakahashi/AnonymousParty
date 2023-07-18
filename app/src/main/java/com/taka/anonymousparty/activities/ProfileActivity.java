@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton mEditButton;
     private String mPreviousUsername;
     private CircleImageView mCircleImageViewBack;
-    private CircleImageView mCircleImageViewProfile;
+    private CircleImageView mCircleProfileIcon;
     private CircleImageView mCircleImageChangePhoto;
     AuthProvider mAuthProvider;
     UsersProvider mUsersProvider;
@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         //Reconocimiento de objetos
         mCircleImageViewBack = findViewById(R.id.circleImageBack);
-        mCircleImageViewProfile = findViewById(R.id.circleImageProfile);
+        mCircleProfileIcon = findViewById(R.id.circleProfileIcon);
         mCircleImageChangePhoto = findViewById(R.id.circleImageChangePhoto);
         mTextInputUsername = findViewById(R.id.usernameEditText);
         mEditButton = findViewById(R.id.editButton);
@@ -74,8 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mTextInputUsername.isEnabled()) {
-                    // User clicked the edit button while the EditText is enabled
-                    // Disable the EditText and revert the username if it was empty
                     String currentUsername = mTextInputUsername.getText().toString();
                     if (currentUsername.isEmpty()) {
                         mTextInputUsername.setText(mPreviousUsername);
@@ -147,7 +145,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
-        //mUsersProvider.updateOnline(false, ProfileActivity.this);
     }
 
     @Override
@@ -159,7 +156,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        //mUsersProvider.updateOnline(false, ProfileActivity.this);
     }
 
     private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(
@@ -168,7 +164,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK) {
                     if (result.getData() != null) {
                         String imageUrl = result.getData().getStringExtra("selected_image_url");
-                        Glide.with(this).load(imageUrl).into(mCircleImageViewProfile);
+                        Glide.with(this).load(imageUrl).into(mCircleProfileIcon);
                         updateProfileIcon(imageUrl);
                     }
                 }
@@ -182,6 +178,14 @@ public class ProfileActivity extends AppCompatActivity {
                 if (documentSnapshot.exists()){
                     String username = documentSnapshot.getString("username");
                     mTextInputUsername.setText(username);
+                    if (documentSnapshot.contains("imageProfile")) {
+                        String imageProfile = documentSnapshot.getString("imageProfile");
+                        if (imageProfile != null) {
+                            if (!imageProfile.equals("")) {
+                                Glide.with(ProfileActivity.this).load(imageProfile).into(mCircleProfileIcon);
+                            }
+                        }
+                    }
                 }
             }
         });
