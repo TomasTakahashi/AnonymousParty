@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
-                .setMessage("Espere un momento")
+                .setMessage("Wait a moment")
                 .setCancelable(false).build();
 
         mButtonRegister.setOnClickListener(new View.OnClickListener(){

@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -161,8 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     User newUser = new User();
                     newUser.setEmail(email);
                     newUser.setId(userId);
-                    //ArrayList<String> idsUserChat = new ArrayList<>(Arrays.asList(userId));
-                    //newUser.setIdsUserChat(idsUserChat);
+
                     mUsersProvider.create(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -157,15 +158,14 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                         String username = documentSnapshot.getString("username");
                         holder.textViewUsername.setText(username.toUpperCase());
                     }
-                    //if (documentSnapshot.contains("image_profile")) {
-                    //String imageProfile = documentSnapshot.getString("image_profile");
-                    //if (imageProfile != null) {
-                    //if (!imageProfile.isEmpty()) {
-                    //Picasso.get().load(imageProfile).into(holder.circleImageChat);
-                    //Picasso.with(context).load(imageProfile).into(holder.circleImageChat);
-                    //}
-                    //}
-                    //}
+                    if (documentSnapshot.contains("imageProfile")) {
+                        String imageProfile = documentSnapshot.getString("imageProfile");
+                        if (imageProfile != null) {
+                            if (!imageProfile.isEmpty()) {
+                                Glide.with(context).load(imageProfile).into(holder.circleImageChat);
+                            }
+                        }
+                    }
                 }
             }
         });

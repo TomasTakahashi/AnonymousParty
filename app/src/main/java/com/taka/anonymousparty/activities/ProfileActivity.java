@@ -168,8 +168,8 @@ public class ProfileActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK) {
                     if (result.getData() != null) {
                         String imageUrl = result.getData().getStringExtra("selected_image_url");
-                        // Utiliza Glide o cualquier otra biblioteca para cargar la imagen en mCircleImageViewProfile
                         Glide.with(this).load(imageUrl).into(mCircleImageViewProfile);
+                        updateProfileIcon(imageUrl);
                     }
                 }
             }
@@ -194,7 +194,23 @@ public class ProfileActivity extends AppCompatActivity {
         user.setId(id);
         user.setUsername(username);
 
-        mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mUsersProvider.updateUsername(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()){
+                    Toast.makeText(ProfileActivity.this, "Failed to update user", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void updateProfileIcon(String imageUrl){
+        String id = mAuthProvider.getUid();
+        User user = new User();
+        user.setId(id);
+        user.setImageProfile(imageUrl);
+
+        mUsersProvider.updateUProfileIcon(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (!task.isSuccessful()){

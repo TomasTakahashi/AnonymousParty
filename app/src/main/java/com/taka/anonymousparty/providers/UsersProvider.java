@@ -74,6 +74,18 @@ public class UsersProvider {
         return mCollectionUsers.document(user.getId()).update(map);
     }
 
+    public Task<Void> updateUsername(User user) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", user.getUsername());
+        return mCollectionUsers.document(user.getId()).update(map);
+    }
+
+    public Task<Void> updateUProfileIcon(User user) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("imageProfile", user.getImageProfile());
+        return mCollectionUsers.document(user.getId()).update(map);
+    }
+
     public static void updateOnline(boolean status, final Context context){
         UsersProvider usersProvider = new UsersProvider();
         AuthProvider authProvider = new AuthProvider();

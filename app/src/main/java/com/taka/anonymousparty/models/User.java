@@ -22,7 +22,7 @@ public class User {
         this.id = id;
         this.email = email;
         this.username = username;
-        //this.imageProfile = imageProfile;
+        this.imageProfile = imageProfile;
         this.timestamp = timestamp;
         this.lastConnection = lastConnection;
         this.online = online;
@@ -60,13 +60,9 @@ public class User {
         this.timestamp = timestamp;
     }
 
-//    public String getImageProfile() {
-//        return imageProfile;
-//    }
-//
-//    public void setImageProfile(String imageProfile) {
-//        this.imageProfile = imageProfile;
-//    }
+    public String getImageProfile() {return imageProfile;}
+
+    public void setImageProfile(String imageProfile) {this.imageProfile = imageProfile;}
 
     public long getLastConnection() {
         return lastConnection;
