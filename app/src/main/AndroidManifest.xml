@@ -26,6 +26,9 @@
             android:name=".activities.CompleteProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ImageGridActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.HomeActivity"
             android:exported="false" />
         <activity

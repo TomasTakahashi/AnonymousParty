@@ -39,7 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String mPreviousUsername;
     private CircleImageView mCircleImageViewBack;
     private CircleImageView mCircleImageViewProfile;
-    private ImageView mImageViewCover;
+    private CircleImageView mCircleImageChangePhoto;
     AuthProvider mAuthProvider;
     UsersProvider mUsersProvider;
 
@@ -51,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         //Reconocimiento de objetos
         mCircleImageViewBack = findViewById(R.id.circleImageBack);
         mCircleImageViewProfile = findViewById(R.id.circleImageProfile);
+        mCircleImageChangePhoto = findViewById(R.id.circleImageChangePhoto);
         mTextInputUsername = findViewById(R.id.usernameEditText);
         mEditButton = findViewById(R.id.editButton);
 
@@ -115,6 +116,14 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
                 return false;
+            }
+        });
+
+        mCircleImageChangePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, ImageGridActivity.class);
+                startActivity(intent);
             }
         });
 
