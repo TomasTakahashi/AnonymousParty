@@ -309,6 +309,9 @@ public class ChatActivity extends AppCompatActivity {
                                 Glide.with(ChatActivity.this).load(imageProfile).into(mCircleImageProfile);
                             }
                         }
+                        else{
+                            mCircleImageProfile.setImageResource(R.drawable.ic_person);
+                        }
                     }
                 }
             }

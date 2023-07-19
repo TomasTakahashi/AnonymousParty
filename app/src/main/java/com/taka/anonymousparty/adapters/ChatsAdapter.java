@@ -79,6 +79,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             idSender = chat.getIdUser1();
         }
 
+        getProfileIcon(idSender,holder.circleProfileIcon);
         getLastMessage(chatId, holder.textViewLastMessage);
         getDateLastMessage(chatId, holder.textViewDateLastMessage);
         getMessageNotRead(chatId, idSender, holder.textViewMessageNotRead, holder.mFrameLayoutMessageNotRead);
@@ -123,17 +124,39 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     }
 
     private void getMessageNotRead(String chatId, String idSender, TextView textViewMessageNotRead, FrameLayout mFrameLayoutMessageNotRead) {
-        mListener = mMessagesProvider.getMessagesByChatAndSender(chatId, idSender).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if (queryDocumentSnapshots != null){
-                    int size = queryDocumentSnapshots.size();
-                    if (size > 0){
-                        mFrameLayoutMessageNotRead.setVisibility(View.VISIBLE);
-                        textViewMessageNotRead.setText(String.valueOf(size));
+        mListener = mMessagesProvider.getMessagesByChatAndSender(chatId, idSender)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        if (queryDocumentSnapshots != null){
+                            int size = queryDocumentSnapshots.size();
+                            if (size > 0){
+                                mFrameLayoutMessageNotRead.setVisibility(View.VISIBLE);
+                                textViewMessageNotRead.setText(String.valueOf(size));
+                            }
+                            else{
+                                mFrameLayoutMessageNotRead.setVisibility(View.GONE);
+                            }
+                        }
                     }
-                    else{
-                        mFrameLayoutMessageNotRead.setVisibility(View.GONE);
+        });
+    }
+
+    private void getProfileIcon(String idSender, CircleImageView mCircleProfileIcon){
+        mListener = mUsersProvider.getUserRealTime(idSender).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot.exists()) {
+                    if (documentSnapshot.contains("imageProfile")) {
+                        String imageProfile = documentSnapshot.getString("imageProfile");
+                        if (imageProfile != null) {
+                            if (!imageProfile.equals("")) {
+                                Glide.with(context).load(imageProfile).into(mCircleProfileIcon);
+                            }
+                        }
+                        else{
+                            mCircleProfileIcon.setImageResource(R.drawable.ic_person);
+                        }
                     }
                 }
             }
@@ -162,8 +185,11 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                         String imageProfile = documentSnapshot.getString("imageProfile");
                         if (imageProfile != null) {
                             if (!imageProfile.isEmpty()) {
-                                Glide.with(context).load(imageProfile).into(holder.circleImageChat);
+                                Glide.with(context).load(imageProfile).into(holder.circleProfileIcon);
                             }
+                        }
+                        else{
+                            holder.circleProfileIcon.setImageResource(R.drawable.ic_person);
                         }
                     }
                 }
@@ -183,7 +209,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         TextView textViewLastMessage;
         TextView textViewDateLastMessage;
         TextView textViewMessageNotRead;
-        CircleImageView circleImageChat;
+        CircleImageView circleProfileIcon;
         FrameLayout mFrameLayoutMessageNotRead;
         View viewHolder;
 
@@ -193,7 +219,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             textViewLastMessage = view.findViewById(R.id.textViewLastMessageChat);
             textViewDateLastMessage = view.findViewById(R.id.textViewDateLastMessage);
             textViewMessageNotRead = view.findViewById(R.id.textViewMessageNotRead);
-            circleImageChat = view.findViewById(R.id.circleImageChat);
+            circleProfileIcon = view.findViewById(R.id.circleProfileIcon);
             mFrameLayoutMessageNotRead = view.findViewById(R.id.frameLayoutMessageNotRead);
             viewHolder = view;
         }

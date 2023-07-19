@@ -8,7 +8,7 @@
     android:layout_marginLeft="25dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleImageChat"
+        android:id="@+id/circleProfileIcon"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:src="@drawable/ic_person"
@@ -22,7 +22,7 @@
         android:maxLines="1"
         android:textColor="@color/colorPrimaryNight"
         android:textSize="16dp"
-        android:layout_toEndOf="@id/circleImageChat"
+        android:layout_toEndOf="@id/circleProfileIcon"
         android:layout_marginLeft="20dp"/>
 
     <TextView
@@ -32,7 +32,7 @@
         android:text=""
         android:maxLines="1"
         android:textSize="14dp"
-        android:layout_toEndOf="@id/circleImageChat"
+        android:layout_toEndOf="@id/circleProfileIcon"
         android:layout_below="@id/textViewUsernameChat"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="20dp"/>
