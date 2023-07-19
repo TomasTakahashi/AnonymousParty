@@ -1,5 +1,7 @@
 package com.taka.anonymousparty.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,20 +28,27 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
 public class CompleteProfileActivity extends AppCompatActivity {
-    TextInputEditText mTextInputUserName;
-    Button mButtonRegister;
     AuthProvider mAuthProvider;
     UsersProvider mUsersProvider;
-    AlertDialog mDialog;
+    private  CircleImageView mCircleProfileIcon;
+    private CircleImageView mCircleImageChangePhoto;
+    private TextInputEditText mTextInputUserName;
+    private Button mButtonRegister;
+    private AlertDialog mDialog;
+
+    private String mImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_profile);
 
+        mCircleProfileIcon = findViewById(R.id.circleProfileIcon);
+        mCircleImageChangePhoto = findViewById(R.id.circleImageChangePhoto);
         mTextInputUserName = findViewById(R.id.textInputUserName);
         mButtonRegister = findViewById(R.id.btnConfirm);
 
@@ -55,6 +65,11 @@ public class CompleteProfileActivity extends AppCompatActivity {
                 .setTheme(R.style.CustomSpotsDialog)
                 .build();
 
+        mCircleImageChangePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(CompleteProfileActivity.this, ImageGridActivity.class);
+            imageGridLauncher.launch(intent);
+        });
+
         mButtonRegister.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -62,6 +77,18 @@ public class CompleteProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    if (result.getData() != null) {
+                        mImageUrl = result.getData().getStringExtra("selected_image_url");
+                        Glide.with(this).load(mImageUrl).into(mCircleProfileIcon);
+                    }
+                }
+            }
+    );
 
     private void register(){
         String username = mTextInputUserName.getText().toString();
@@ -80,6 +107,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
         user.setId(id);
         user.setUsername(username);
         user.setTimestamp(new Date().getTime());
+        user.setImageProfile(mImageUrl);
 
         mDialog.show();
         mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {

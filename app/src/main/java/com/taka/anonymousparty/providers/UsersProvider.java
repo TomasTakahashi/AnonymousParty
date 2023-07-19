@@ -70,7 +70,7 @@ public class UsersProvider {
         Map<String, Object> map = new HashMap<>();
         map.put("username", user.getUsername());
         map.put("timestamp", new Date().getTime());
-        //map.put("image_profile", user.getImageProfile());
+        map.put("imageProfile", user.getImageProfile());
         return mCollectionUsers.document(user.getId()).update(map);
     }
 
