@@ -185,6 +185,9 @@ public class ProfileActivity extends AppCompatActivity {
                                 Glide.with(ProfileActivity.this).load(imageProfile).into(mCircleProfileIcon);
                             }
                         }
+                        else{
+                            mCircleProfileIcon.setImageResource(R.drawable.ic_person);
+                        }
                     }
                 }
             }

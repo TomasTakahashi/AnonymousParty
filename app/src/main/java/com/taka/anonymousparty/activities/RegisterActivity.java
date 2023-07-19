@@ -1,5 +1,7 @@
 package com.taka.anonymousparty.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -35,6 +38,8 @@ import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private  CircleImageView mCircleProfileIcon;
+    private CircleImageView mCircleImageChangePhoto;
     TextInputEditText mTextInputUserName;
     TextInputEditText mTextInputEmail;
     TextInputEditText mTextInputPassword;
@@ -45,11 +50,16 @@ public class RegisterActivity extends AppCompatActivity {
     AlertDialog mDialog;
     CircleImageView mCircleImageViewBack;
 
+    private String mImageUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
+        mCircleProfileIcon = findViewById(R.id.circleProfileIcon);
+        mCircleImageChangePhoto = findViewById(R.id.circleImageChangePhoto);
         mTextInputUserName = findViewById(R.id.textInputUserName);
         mTextInputEmail = findViewById(R.id.textInputEmail);
         mTextInputPassword = findViewById(R.id.textInputPassword);
@@ -65,6 +75,11 @@ public class RegisterActivity extends AppCompatActivity {
                 .setMessage("Wait a moment")
                 .setCancelable(false).build();
 
+        mCircleImageChangePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, ImageGridActivity.class);
+            imageGridLauncher.launch(intent);
+        });
+
         mButtonRegister.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -79,6 +94,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    if (result.getData() != null) {
+                        mImageUrl = result.getData().getStringExtra("selected_image_url");
+                        Glide.with(this).load(mImageUrl).into(mCircleProfileIcon);
+                    }
+                    else{
+                        mCircleProfileIcon.setImageResource(R.drawable.ic_person);
+                    }
+                }
+            }
+    );
 
     private void register(){
         String username = mTextInputUserName.getText().toString();
@@ -116,6 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
                     newUser.setEmail(email);
                     newUser.setUsername(username);
                     newUser.setTimestamp(new Date().getTime());
+                    newUser.setImageProfile(mImageUrl);
 
                     mUsersProvider.create(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

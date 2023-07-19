@@ -11,38 +11,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <io.github.florent37.shapeofview.shapes.DiagonalView
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:elevation="8dp"
-        app:shape_diagonal_angle="10"
-        app:shape_diagonal_position="bottom">
-
-        <!-- YOUR CONTENT -->
-
-        <View
+        <io.github.florent37.shapeofview.shapes.DiagonalView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ShapeView"/>
+            android:layout_height="220dp"
+            android:elevation="8dp"
+            app:shape_diagonal_angle="10"
+            app:shape_diagonal_position="bottom">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="REGISTER NOW"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp"/>
+            <!-- YOUR CONTENT -->
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/ic_person"
-            android:layout_gravity="center"
-            app:tint="?attr/colorAccent"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ShapeView"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="REGISTER NOW"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:layout_marginTop="10dp"/>
 
-    </io.github.florent37.shapeofview.shapes.DiagonalView>>
+        </io.github.florent37.shapeofview.shapes.DiagonalView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +42,7 @@
             android:orientation="horizontal"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="100dp"
             android:gravity="center">
 
             <ImageView
@@ -173,6 +165,33 @@
 
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleProfileIcon"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="120dp"
+            android:src="@drawable/ic_person"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="5dp"
+            app:civ_circle_background_color="?attr/background" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleImageChangePhoto"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignRight="@id/circleProfileIcon"
+            android:layout_alignBottom="@id/circleProfileIcon"
+            android:layout_marginBottom="-10dp"
+            android:src="@drawable/ic_camera"
+            app:civ_circle_background_color="#FF000000" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnRegister"

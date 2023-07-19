@@ -86,6 +86,9 @@ public class CompleteProfileActivity extends AppCompatActivity {
                         mImageUrl = result.getData().getStringExtra("selected_image_url");
                         Glide.with(this).load(mImageUrl).into(mCircleProfileIcon);
                     }
+                    else{
+                        mCircleProfileIcon.setImageResource(R.drawable.ic_person);
+                    }
                 }
             }
     );
