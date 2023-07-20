@@ -2,16 +2,26 @@ package com.taka.anonymousparty.services;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.RemoteInput;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.channel.NotificationHelper;
 import com.taka.anonymousparty.models.Message;
@@ -37,7 +47,7 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         String body = data.get("body");
         if (title != null) {
             if (title.equals("New message")) {
-                notifyMessage(data);
+                showNotificationMessage(data);
             }
             else {
                 showNotification(title, body);
@@ -53,64 +63,60 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         notificationHelper.getManager().notify(n, builder.build());
     }
 
-//    private void showNotificationMessage(Map<String, String> data) {
-//        final String imageSender = data.get("imageSender");
-//        final String imageReceiver = data.get("imageReceiver");
-//        Log.d("ENTRO", "NUEVO MENSAJE");
-//        getImageSender(data, imageSender, imageReceiver);
-//    }
+    private void showNotificationMessage(Map<String, String> data) {
+        final String imageSender = data.get("imageSender");
+        final String imageReceiver = data.get("imageReceiver");
+        Log.d("ENTRO", "NUEVO MENSAJE");
+        getImageSender(data, imageSender, imageReceiver);
+    }
 
-//    private void getImageSender(final Map<String, String> data, final String imageSender, final String imageReceiver) {
-//        new Handler(Looper.getMainLooper())
-//                .post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Picasso.with(getApplicationContext())
-//                                .load(imageSender)
-//                                .into(new Target() {
-//                                    @Override
-//                                    public void onBitmapLoaded(final Bitmap bitmapSender, Picasso.LoadedFrom from) {
-//                                        getImageReceiver(data, imageReceiver, bitmapSender);
-//                                    }
-//                                    @Override
-//                                    public void onBitmapFailed(Drawable errorDrawable) {
-//                                        getImageReceiver(data, imageReceiver, null);
-//                                    }
-//                                    @Override
-//                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                                    }
-//                                });
-//                    }
-//                });
-//    }
+    private void getImageSender(final Map<String, String> data, final String imageSender, final String imageReceiver) {
+        new Handler(Looper.getMainLooper())
+                .post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext())
+                                .asBitmap()
+                                .load(imageSender)
+                                .into(new CustomTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap bitmapSender, @Nullable Transition<? super Bitmap> transition) {
+                                        getImageReceiver(data, imageReceiver, bitmapSender);
+                                    }
 
-//    private void getImageReceiver(final Map<String, String> data, String imageReceiver, final Bitmap bitmapSender) {
-//        Picasso.with(getApplicationContext())
-//                .load(imageReceiver)
-//                .into(new Target() {
-//                    @Override
-//                    public void onBitmapLoaded(Bitmap bitmapReceiver, Picasso.LoadedFrom from) {
-//                        notifyMessage(data, bitmapSender, bitmapReceiver);
-//                    }
-//                    @Override
-//                    public void onBitmapFailed(Drawable errorDrawable) {
-//                        notifyMessage(data, bitmapSender, null);
-//                    }
-//                    @Override
-//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                    }
-//                });
-//    }
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        getImageReceiver(data, imageReceiver, null);
+                                    }
+                                });
+                    }
+                });
+    }
 
-    private void notifyMessage(Map<String, String> data) {
+    private void getImageReceiver(final Map<String, String> data, String imageReceiver, final Bitmap bitmapSender) {
+        Glide.with(getApplicationContext())
+                .asBitmap()
+                .load(imageReceiver)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap bitmapReceiver, @Nullable Transition<? super Bitmap> transition) {
+                        notifyMessage(data, bitmapSender, bitmapReceiver);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        notifyMessage(data, bitmapSender, null);
+                    }
+                });
+    }
+
+    private void notifyMessage(Map<String, String> data, Bitmap bitmapSender, Bitmap bitmapReceiver) {
         final String usernameSender = data.get("usernameSender");
         final String usernameReceiver = data.get("usernameReceiver");
         final String lastMessage = data.get("lastMessage");
         String messagesJSON = data.get("messages");
-//        final String imageSender = data.get("imageSender");
-//        final String imageReceiver = data.get("imageReceiver");
+        final String imageSender = data.get("imageSender");
+        final String imageReceiver = data.get("imageReceiver");
 
         final String userIdSender = data.get("userIdSender");
         final String userIdReceiver = data.get("userIdReceiver");
@@ -124,8 +130,8 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         intent.putExtra("idNotification", idNotification);
         intent.putExtra("usernameSender", usernameSender);
         intent.putExtra("usernameReceiver", usernameReceiver);
-//        intent.putExtra("imageSender", imageSender);
-//        intent.putExtra("imageReceiver", imageReceiver);
+        intent.putExtra("imageSender", imageSender);
+        intent.putExtra("imageReceiver", imageReceiver);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         RemoteInput remoteInput = new RemoteInput.Builder(NOTIFICATION_REPLY).setLabel("Your message...").build();
@@ -146,8 +152,8 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
                         usernameSender,
                         usernameReceiver,
                         lastMessage,
-//                        bitmapSender,
-//                        bitmapReceiver,
+                        bitmapSender,
+                        bitmapReceiver,
                         action
                 );
         notificationHelper.getManager().notify(idNotification, builder.build());

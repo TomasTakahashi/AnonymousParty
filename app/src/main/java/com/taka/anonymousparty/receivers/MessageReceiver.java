@@ -42,6 +42,8 @@ public class MessageReceiver extends BroadcastReceiver {
     String mExtraIdChat;
     String mExtraUsernameSender;
     String mExtraUsernameReceiver;
+    String mExtraImageSender;
+    String mExtraImageReceiver;
     int mExtraIdNotification;
 
     TokenProvider mTokenProvider;
@@ -61,8 +63,8 @@ public class MessageReceiver extends BroadcastReceiver {
         mExtraUsernameSender = intent.getExtras().getString("usernameSender");
         mExtraUsernameReceiver = intent.getExtras().getString("usernameReceiver");
         mExtraIdChat = intent.getExtras().getString("idChat");
-//        mExtraImageSender = intent.getExtras().getString("imageSender");
-//        mExtraImageReceiver = intent.getExtras().getString("imageReceiver");
+        mExtraImageSender = intent.getExtras().getString("imageSender");
+        mExtraImageReceiver = intent.getExtras().getString("imageReceiver");
         mExtraIdNotification = intent.getExtras().getInt("idNotification");
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -134,8 +136,8 @@ public class MessageReceiver extends BroadcastReceiver {
         data.put("userIdSender", message.getUserIdSender());
         data.put("userIdReceiver", message.getUserIdReceiver());
         data.put("idChat", message.getIdChat());
-//        data.put("imageSender", mExtraImageReceiver);
-//        data.put("imageReceiver", mExtraImageSender);
+        data.put("imageSender", mExtraImageReceiver);
+        data.put("imageReceiver", mExtraImageSender);
 
         FCMBody body = new FCMBody(token, "high", "4500s", data);
         mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {

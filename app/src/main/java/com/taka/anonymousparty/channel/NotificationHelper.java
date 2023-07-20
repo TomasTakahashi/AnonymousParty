@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 
@@ -68,40 +69,38 @@ public class NotificationHelper extends ContextWrapper{
             String usernameSender,
             String usernameReceiver,
             String lastMessage,
-//            Bitmap bitmapSender,
-//            Bitmap bitmapReceiver,
+            Bitmap bitmapSender,
+            Bitmap bitmapReceiver,
             NotificationCompat.Action action) {
 
         Person person1 = null;
-//        if (bitmapReceiver == null) {
-//            person1 = new Person.Builder()
-//                    .setName(usernameReceiver)
-//                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.drawable.ic_person_grey))
-//                    .build();
-//        }
-//        else {
+        if (bitmapReceiver == null) {
             person1 = new Person.Builder()
                     .setName(usernameReceiver)
-//                    .setIcon(IconCompat.createWithBitmap(bitmapReceiver))
-                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.mipmap.ic_launcher))
+                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.drawable.ic_person))
                     .build();
-//        }
+        }
+        else {
+            person1 = new Person.Builder()
+                    .setName(usernameReceiver)
+                    .setIcon(IconCompat.createWithBitmap(bitmapReceiver))
+                    .build();
+        }
 
         Person person2 = null;
 
-//        if (bitmapSender == null) {
-//            person2 = new Person.Builder()
-//                    .setName(usernameSender)
-//                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.drawable.ic_person_grey))
-//                    .build();
-//        }
-//        else {
+        if (bitmapSender == null) {
             person2 = new Person.Builder()
                     .setName(usernameSender)
-//                    .setIcon(IconCompat.createWithBitmap(bitmapSender))
-                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.mipmap.ic_launcher))
+                    .setIcon(IconCompat.createWithResource(getApplicationContext(), R.drawable.ic_person))
                     .build();
-//        }
+        }
+        else {
+            person2 = new Person.Builder()
+                    .setName(usernameSender)
+                    .setIcon(IconCompat.createWithBitmap(bitmapSender))
+                    .build();
+        }
 
         NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(person1);
         NotificationCompat.MessagingStyle.Message message1 = new

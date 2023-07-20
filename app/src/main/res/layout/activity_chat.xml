@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="?attr/actionBarSize"
             android:layout_above="@+id/linearLayoutTextMessage">
 
             <androidx.recyclerview.widget.RecyclerView

@@ -30,7 +30,6 @@ import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.models.User;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
-import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
 import java.io.File;
 

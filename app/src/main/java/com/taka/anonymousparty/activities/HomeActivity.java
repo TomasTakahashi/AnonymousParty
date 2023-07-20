@@ -18,8 +18,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -31,7 +29,6 @@ import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.TokenProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 import com.taka.anonymousparty.providers.ChatsProvider.ChatExistsCallback;
-import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
 import java.util.ArrayList;
 import java.util.Date;

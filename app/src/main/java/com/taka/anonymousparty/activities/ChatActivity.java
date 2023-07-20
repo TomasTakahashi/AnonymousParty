@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,7 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,10 +47,8 @@ import com.taka.anonymousparty.providers.NotificationProvider;
 import com.taka.anonymousparty.providers.TokenProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 import com.taka.anonymousparty.utils.RelativeTime;
-import com.taka.anonymousparty.utils.ViewedMessageHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -96,6 +92,8 @@ public class ChatActivity extends AppCompatActivity {
 
     String mMyUsername;
     String mUsernameReceiver;
+    String mImageReceiver = "";
+    String mImageSender = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,6 +268,9 @@ public class ChatActivity extends AppCompatActivity {
                     if (documentSnapshot.contains("username")) {
                         mMyUsername = documentSnapshot.getString("username");
                     }
+                    if (documentSnapshot.contains("imageProfile")) {
+                        mImageSender = documentSnapshot.getString("imageProfile");
+                    }
                 }
             }
         });
@@ -303,10 +304,10 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                     if (documentSnapshot.contains("imageProfile")) {
-                        String imageProfile = documentSnapshot.getString("imageProfile");
-                        if (imageProfile != null) {
-                            if (!imageProfile.equals("")) {
-                                Glide.with(ChatActivity.this).load(imageProfile).into(mCircleImageProfile);
+                        mImageReceiver = documentSnapshot.getString("imageProfile");
+                        if (mImageReceiver != null) {
+                            if (!mImageReceiver.equals("")) {
+                                Glide.with(ChatActivity.this).load(mImageReceiver).into(mCircleImageProfile);
                             }
                         }
                         else{
@@ -418,6 +419,11 @@ public class ChatActivity extends AppCompatActivity {
         data.put("usernameReceiver", mUsernameReceiver.toUpperCase());
         data.put("userIdReceiver", message.getUserIdReceiver());
         data.put("idChat", message.getIdChat());
+
+        data.put("imageSender", mImageSender);
+        data.put("imageReceiver", mImageReceiver);
+
+
 
         FCMBody body = new FCMBody(token, "high", "4500s", data);
         mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {
