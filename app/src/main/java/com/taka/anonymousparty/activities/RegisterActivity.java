@@ -19,8 +19,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.OAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.taka.anonymousparty.R;
+import com.taka.anonymousparty.models.Image;
 import com.taka.anonymousparty.models.User;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
@@ -29,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,6 +101,8 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        selectRandomImage();
     }
 
     private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(
@@ -109,6 +119,43 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
     );
+
+    private void selectRandomImage() {
+        mDialog.show();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Images");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> imageUrls = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Image image = dataSnapshot.getValue(Image.class);
+                    if (image != null) {
+                        imageUrls.add(image.getImageURL());
+                    }
+                }
+
+                if (!imageUrls.isEmpty()) {
+                    Random random = new Random();
+                    int randomIndex = random.nextInt(imageUrls.size());
+                    mImageUrl = imageUrls.get(randomIndex);
+
+                    // Cargar la imagen seleccionada aleatoriamente en mCircleProfileIcon
+                    Glide.with(RegisterActivity.this).load(mImageUrl).into(mCircleProfileIcon);
+                } else {
+                    // Si no hay imágenes disponibles, puedes establecer una imagen predeterminada aquí
+                    mCircleProfileIcon.setImageResource(R.drawable.ic_person);
+                }
+
+                mDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                mDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, "Error al cargar las imágenes", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void register(){
         String username = mTextInputUserName.getText().toString();
