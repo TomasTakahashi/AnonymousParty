@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -67,6 +69,26 @@ public class ProfileActivity extends AppCompatActivity {
 
         //Display user info
         getUserInfo();
+
+        mTextInputUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Eliminar los caracteres de salto de línea del texto
+                if (s != null) {
+                    String textWithoutNewlines = s.toString().replace("\n", "");
+                    if (!s.toString().equals(textWithoutNewlines)) {
+                        mTextInputUsername.setText(textWithoutNewlines);
+                        mTextInputUsername.setSelection(textWithoutNewlines.length());
+                    }
+                }
+            }
+        });
 
         // Configurar el evento onClickListener para el botón de edición
         mEditButton.setOnClickListener(new View.OnClickListener() {
