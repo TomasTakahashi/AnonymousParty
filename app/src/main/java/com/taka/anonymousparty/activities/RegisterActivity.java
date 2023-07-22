@@ -158,7 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register(){
-        String username = mTextInputUserName.getText().toString();
+        String username = mTextInputUserName.getText().toString().trim();
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
         String confirmPassword = mTextInputConfirmPassword.getText().toString();

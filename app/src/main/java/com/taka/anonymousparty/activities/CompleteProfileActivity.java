@@ -143,7 +143,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
 
 
     private void register(){
-        String username = mTextInputUserName.getText().toString();
+        String username = mTextInputUserName.getText().toString().trim();
 
         if (username.isEmpty()) {
             Toast.makeText(this, "To continue enter a username.", Toast.LENGTH_LONG).show();

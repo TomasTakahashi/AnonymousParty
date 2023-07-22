@@ -216,7 +216,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void updateUsername(){
-        String username = mTextInputUsername.getText().toString();
+        String username = mTextInputUsername.getText().toString().trim();
         String id = mAuthProvider.getUid();
         User user = new User();
         user.setId(id);
