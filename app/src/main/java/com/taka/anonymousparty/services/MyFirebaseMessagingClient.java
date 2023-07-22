@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.taka.anonymousparty.R;
+import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.channel.NotificationHelper;
 import com.taka.anonymousparty.models.Message;
 import com.taka.anonymousparty.receivers.MessageReceiver;
@@ -117,7 +118,6 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         String messagesJSON = data.get("messages");
         final String imageSender = data.get("imageSender");
         final String imageReceiver = data.get("imageReceiver");
-
         final String userIdSender = data.get("userIdSender");
         final String userIdReceiver = data.get("userIdReceiver");
         final String idChat = data.get("idChat");
@@ -136,7 +136,7 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         RemoteInput remoteInput = new RemoteInput.Builder(NOTIFICATION_REPLY).setLabel("Your message...").build();
 
-        final NotificationCompat.Action action = new NotificationCompat.Action.Builder(
+        final NotificationCompat.Action actionReply = new NotificationCompat.Action.Builder(
                 R.mipmap.ic_launcher,
                 "REPLY",
                 pendingIntent)
@@ -146,6 +146,15 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         Gson gson = new Gson();
         final Message[] messages = gson.fromJson(messagesJSON, Message[].class);
         NotificationHelper notificationHelper = new NotificationHelper(getBaseContext());
+
+
+        Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
+        chatIntent.putExtra("idUser1", userIdSender);
+        chatIntent.putExtra("idUser2", userIdReceiver);
+        chatIntent.putExtra("idChat", idChat);
+        chatIntent.putExtra("idNotification", idNotification);
+        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), idNotification, chatIntent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
+
         NotificationCompat.Builder builder =
                 notificationHelper.getNotificationMessage(
                         messages,
@@ -154,7 +163,8 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
                         lastMessage,
                         bitmapSender,
                         bitmapReceiver,
-                        action
+                        actionReply,
+                        contentIntent
                 );
         notificationHelper.getManager().notify(idNotification, builder.build());
     }

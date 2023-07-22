@@ -3,6 +3,7 @@ package com.taka.anonymousparty.channel;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -71,7 +72,7 @@ public class NotificationHelper extends ContextWrapper{
             String lastMessage,
             Bitmap bitmapSender,
             Bitmap bitmapReceiver,
-            NotificationCompat.Action action) {
+            NotificationCompat.Action actionReply, PendingIntent contentIntent) {
 
         Person person1 = null;
         if (bitmapReceiver == null) {
@@ -122,7 +123,8 @@ public class NotificationHelper extends ContextWrapper{
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(messagingStyle)
-                .addAction(action);
+                .addAction(actionReply)
+                .setContentIntent(contentIntent);
     }
 }
 
