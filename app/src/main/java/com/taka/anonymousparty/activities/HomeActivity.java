@@ -136,6 +136,8 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.itemLogout) {
             logout();
+        } else if (item.getItemId() == R.id.itemSettings) {
+            goToSettings();
         } else if (item.getItemId() == R.id.itemProfile) {
             goToProfile();
         }
@@ -144,6 +146,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private void goToProfile() {
         Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToSettings() {
+        Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 

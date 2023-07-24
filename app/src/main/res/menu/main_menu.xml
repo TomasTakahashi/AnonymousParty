@@ -6,6 +6,10 @@
         android:title="Profile"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/itemSettings"
+        android:title="Settings"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/itemLogout"
         android:title="Log out"
         app:showAsAction="never"/>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/action_bar_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutNotification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:orientation="horizontal"
+        android:paddingTop="80dp"
+        android:paddingLeft="20dp">
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:textSize="26sp"
+            android:enabled="false"
+            android:textStyle="bold"
+            />
+
+        <Switch
+            android:id="@+id/switchNotifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutNotification"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingLeft="35dp">
+
+        <TextView
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:text="Sound"
+            android:textSize="23sp"
+            android:enabled="false"/>
+
+        <Switch
+            android:id="@+id/switchSound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutVibration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayoutSound"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingLeft="35dp">
+
+        <TextView
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:text="Vibration"
+            android:textSize="23sp"
+            android:enabled="false"/>
+
+        <Switch
+            android:id="@+id/switchVibration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+</RelativeLayout>
