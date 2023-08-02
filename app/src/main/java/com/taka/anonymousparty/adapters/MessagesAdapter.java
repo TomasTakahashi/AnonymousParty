@@ -3,6 +3,8 @@ package com.taka.anonymousparty.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,17 +51,18 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesA
         holder.textViewDate.setText(relativeTime);
 
         if (message.getUserIdSender().equals(mAuthProvider.getUid())){
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams paramsLinearLayout = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             );
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.setMargins(150, 0, 0,0);
-            holder.linearLayoutMessage.setLayoutParams(params);
-            holder.linearLayoutMessage.setPadding(30,20,0,20);
+            paramsLinearLayout.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            paramsLinearLayout.setMargins(150, 0, 0,0);
+            holder.linearLayoutMessage.setLayoutParams(paramsLinearLayout);
+            holder.linearLayoutMessage.setPadding(30,20,30,20);
             holder.linearLayoutMessage.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_linear_layout));
             holder.imageViewViewed.setVisibility(View.VISIBLE);
             holder.textViewDate.setTextColor(Color.LTGRAY);
+            holder.textViewMessage.setGravity(Gravity.RIGHT);
         }
         else{
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -73,6 +76,7 @@ public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesA
             holder.linearLayoutMessage.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_linear_layout_second));
             holder.imageViewViewed.setVisibility(View.GONE);
             holder.textViewDate.setTextColor(Color.LTGRAY);
+            holder.textViewMessage.setGravity(Gravity.LEFT);
         }
 
         if (message.isViewed()){
