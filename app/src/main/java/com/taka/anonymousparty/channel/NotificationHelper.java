@@ -124,7 +124,8 @@ public class NotificationHelper extends ContextWrapper{
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(messagingStyle)
                 .addAction(actionReply)
-                .setContentIntent(contentIntent);
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true);
     }
 }
 
