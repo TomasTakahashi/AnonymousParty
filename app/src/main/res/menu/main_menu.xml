@@ -6,8 +6,12 @@
         android:title="Profile"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/itemSettings"
-        android:title="Settings"
+<!--    <item android:id="@+id/itemSettings"-->
+<!--        android:title="Settings"-->
+<!--        app:showAsAction="never"/>-->
+
+    <item android:id="@+id/itemAbout"
+        android:title="About"
         app:showAsAction="never"/>
 
     <item android:id="@+id/itemLogout"

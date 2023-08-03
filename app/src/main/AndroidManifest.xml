@@ -25,6 +25,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.AboutActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

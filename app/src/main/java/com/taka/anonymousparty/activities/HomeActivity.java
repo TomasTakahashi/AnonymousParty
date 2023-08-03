@@ -134,12 +134,17 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.itemLogout) {
-            logout();
-        } else if (item.getItemId() == R.id.itemSettings) {
-            goToSettings();
-        } else if (item.getItemId() == R.id.itemProfile) {
+        if (item.getItemId() == R.id.itemProfile) {
             goToProfile();
+        }
+//        else if (item.getItemId() == R.id.itemSettings) {
+//            goToSettings();
+//        }
+        else if (item.getItemId() == R.id.itemAbout) {
+            goToAbout();
+        }
+        else if (item.getItemId() == R.id.itemLogout) {
+            logout();
         }
         return true;
     }
@@ -151,6 +156,18 @@ public class HomeActivity extends AppCompatActivity {
 
     private void goToSettings() {
         Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToAbout() {
+        Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
+        startActivity(intent);
+    }
+
+    private void logout() {
+        mAuthProvider.logout();
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -222,13 +239,6 @@ public class HomeActivity extends AppCompatActivity {
         idsUsers.add(idUser2);
         chat.setIdsUsers(idsUsers);
         mChatsProvider.create(chat);
-    }
-
-    private void logout() {
-        mAuthProvider.logout();
-        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     private void createToken(){mTokenProvider.create(mAuthProvider.getUid());}

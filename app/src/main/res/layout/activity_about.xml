@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/action_bar_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutMessage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_linear_layout"
+        android:gravity="center"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:elevation="8dp"
+        >
+
+        <ImageView
+                android:id="@+id/imageViewViewedMessage"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:src="@drawable/opticdev_gray"
+                />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anónimo"
+                android:textSize="26sp"
+                android:enabled="false"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Version 1.0.0"
+                android:textSize="15sp"
+                android:enabled="false"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tomás Takahashi"
+                android:textSize="15sp"
+                android:enabled="false"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
