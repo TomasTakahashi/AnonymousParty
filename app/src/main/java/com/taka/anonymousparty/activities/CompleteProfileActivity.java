@@ -149,30 +149,31 @@ public class CompleteProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "To continue enter a username.", Toast.LENGTH_LONG).show();
         }
         else{
-            updateUser(username);
+            registerUser(username);
         }
     }
 
-    private void updateUser(String username){
+    private void registerUser(String username){
         String id = mAuthProvider.getUid();
+        String email = mAuthProvider.getEmail();
         User user = new User();
         user.setId(id);
+        user.setEmail(email);
         user.setUsername(username);
         user.setTimestamp(new Date().getTime());
         user.setImageProfile(mImageUrl);
 
         mDialog.show();
-        mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mUsersProvider.create(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 mDialog.dismiss();
                 if (task.isSuccessful()){
                     Intent intent = new Intent(CompleteProfileActivity.this, HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(CompleteProfileActivity.this, "Failed to store user in database", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CompleteProfileActivity.this, "Failed to store user in database.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

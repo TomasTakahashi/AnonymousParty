@@ -163,24 +163,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    String email = mAuthProvider.getEmail();
-                    User newUser = new User();
-                    newUser.setEmail(email);
-                    newUser.setId(userId);
-
-                    mUsersProvider.create(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            mDialog.dismiss();
-                            if (task.isSuccessful()){
-                                Intent intent = new Intent(MainActivity.this, CompleteProfileActivity.class);
-                                startActivity(intent);
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this, "No se pudo almacenar la información del usuario.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    Intent intent = new Intent(MainActivity.this, CompleteProfileActivity.class);
+                    startActivity(intent);
                 }
             }
         });
