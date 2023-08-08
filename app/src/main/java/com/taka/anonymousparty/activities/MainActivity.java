@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -141,6 +142,13 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String userId = mAuthProvider.getUid();
                             checkUserExist(userId);
+
+                            // Guardar el estado de inicio de sesión en SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("isLoggedIn", true);
+                            editor.apply();
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                         } else {
@@ -186,6 +194,12 @@ public class MainActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     mDialog.dismiss();
                     if (task.isSuccessful()){
+                        // Guardar el estado de inicio de sesión en SharedPreferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("isLoggedIn", true);
+                        editor.apply();
+
                         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
