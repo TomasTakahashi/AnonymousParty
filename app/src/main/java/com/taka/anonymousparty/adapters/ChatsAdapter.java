@@ -2,14 +2,19 @@ package com.taka.anonymousparty.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -80,7 +85,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         }
 
         getProfileIcon(idSender,holder.circleProfileIcon);
-        getLastMessage(chatId, holder.textViewLastMessage);
+        getLastMessage(chatId, holder.textViewLastMessage, holder.imageViewViewed);
         getDateLastMessage(chatId, holder.textViewDateLastMessage);
         getMessageNotRead(chatId, idSender, holder.textViewMessageNotRead, holder.mFrameLayoutMessageNotRead);
 
@@ -90,7 +95,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         return mListener;
     }
 
-    private void getLastMessage(String chatId, TextView textViewLastMessage) {
+    private void getLastMessage(String chatId, TextView textViewLastMessage, ImageView imageViewViewed) {
         mListener = mMessagesProvider.getLastMessage(chatId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -100,6 +105,19 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                             if (lastMessage != null) {
                                 String messageText = lastMessage.getMessage();
                                 textViewLastMessage.setText(messageText);
+
+                                if (lastMessage.getUserIdSender().equals(mAuthProvider.getUid())){
+                                    imageViewViewed.setVisibility(View.VISIBLE);
+                                    if (lastMessage.isViewed()){
+                                        imageViewViewed.setImageResource(R.drawable.ic_double_check_night);
+                                    }
+                                    else{
+                                        imageViewViewed.setImageResource(R.drawable.ic_single_check_night);
+                                    }
+                                }
+                                else{
+                                    imageViewViewed.setVisibility(View.GONE);
+                                }
                             }
                         }
                     }
@@ -207,6 +225,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewUsername;
         TextView textViewLastMessage;
+        ImageView imageViewViewed;
         TextView textViewDateLastMessage;
         TextView textViewMessageNotRead;
         CircleImageView circleProfileIcon;
@@ -217,6 +236,7 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             super(view);
             textViewUsername = view.findViewById(R.id.textViewUsernameChat);
             textViewLastMessage = view.findViewById(R.id.textViewLastMessageChat);
+            imageViewViewed = view.findViewById(R.id.imageViewViewedMessage);
             textViewDateLastMessage = view.findViewById(R.id.textViewDateLastMessage);
             textViewMessageNotRead = view.findViewById(R.id.textViewMessageNotRead);
             circleProfileIcon = view.findViewById(R.id.circleProfileIcon);
