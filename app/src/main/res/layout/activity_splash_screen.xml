@@ -7,7 +7,7 @@
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/imageViewViewedMessage"
+        android:id="@+id/imageIcon"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:src="@drawable/opticdev_gray"

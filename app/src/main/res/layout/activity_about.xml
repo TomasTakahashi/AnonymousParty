@@ -7,7 +7,7 @@
     <include layout="@layout/action_bar_toolbar" />
 
     <LinearLayout
-        android:id="@+id/linearLayoutMessage"
+        android:id="@+id/linearLayoutAbout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,7 +21,7 @@
         >
 
         <ImageView
-                android:id="@+id/imageViewViewedMessage"
+                android:id="@+id/imageIcon"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:src="@drawable/opticdev_gray"

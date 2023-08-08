@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +23,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         // Inflar el diseño de la pantalla de inicio personalizada si es necesario
         setContentView(R.layout.activity_splash_screen); // Cambia por el nombre de tu diseño
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale_rotate);
+        ImageView imageView = findViewById(R.id.imageIcon);
+        imageView.startAnimation(animation);
 
         // Crear un Handler para realizar el retraso
         new Handler().postDelayed(new Runnable() {
