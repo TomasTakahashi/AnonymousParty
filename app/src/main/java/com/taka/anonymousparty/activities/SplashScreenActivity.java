@@ -24,7 +24,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Inflar el diseño de la pantalla de inicio personalizada si es necesario
         setContentView(R.layout.activity_splash_screen); // Cambia por el nombre de tu diseño
 
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale_rotate);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_splash_screen);
         ImageView imageView = findViewById(R.id.imageIcon);
         imageView.startAnimation(animation);
 
