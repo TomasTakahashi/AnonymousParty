@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private  CircleImageView mCircleProfileIcon;
     private CircleImageView mCircleImageChangePhoto;
+    private String mImageUrl;
     TextInputEditText mTextInputUserName;
     TextInputEditText mTextInputEmail;
     TextInputEditText mTextInputPassword;
@@ -61,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout mLinearLayoutVerificationEmail;
     TextView mTextViewVerificationEmailTime;
 
-    private String mImageUrl;
+    private CountDownTimer mCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +230,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 startTimer(username, email);
                             } else {
                                 // Maneja el error al enviar el correo electrónico de verificación
+                                Toast.makeText(RegisterActivity.this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -240,10 +244,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void startTimer(String username, String email) {
 
-        new CountDownTimer(120000, 1000) {
+        mCountDownTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Actualiza el TextView con el tiempo restante
                 mTextViewVerificationEmailTime.setText("" + millisUntilFinished / 1000);
+                FirebaseAuth.getInstance().getCurrentUser().reload().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                            // El usuario se ha verificado, completa el registro
+                            Log.d("CREATEAUTHSTATELISTENER", "VERIFICADO");
+                            completeRegistration(username, email);
+                        }
+                    }
+                });
             }
 
             public void onFinish() {
@@ -267,7 +281,14 @@ public class RegisterActivity extends AppCompatActivity {
         }.start();
     }
 
+    private void cancelTimer() {
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
+    }
+
     private void completeRegistration(String username, String email) {
+        cancelTimer();
         String autoId = mAuthProvider.getUid();
 
         User newUser = new User();
@@ -298,6 +319,4 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

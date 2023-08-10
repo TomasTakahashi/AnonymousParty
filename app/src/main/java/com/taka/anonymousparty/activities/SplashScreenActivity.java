@@ -41,42 +41,56 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void run() {
 
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                String userId = currentUser.getUid();
+                if (currentUser != null){
+                    String userId = currentUser.getUid();
 
-                mUsersProvider = new UsersProvider();
-                mUsersProvider.getUser(userId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()){
-                            Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO EXISTE");
-                            // Determinar la actividad a iniciar según el estado de inicio de sesión
+                    mUsersProvider = new UsersProvider();
+                    mUsersProvider.getUser(userId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()){
+                                Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO EXISTE");
+                                // Determinar la actividad a iniciar según el estado de inicio de sesión
 
-                            SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-                            boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                                SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
-                            Class<?> targetActivityClass = isLoggedIn ? HomeActivity.class : MainActivity.class;
+                                Class<?> targetActivityClass = isLoggedIn ? HomeActivity.class : MainActivity.class;
 
-                            // Iniciar la actividad apropiada
-                            Intent intent = new Intent(SplashScreenActivity.this, targetActivityClass);
-                            startActivity(intent);
-                            finish();
+                                // Iniciar la actividad apropiada
+                                Intent intent = new Intent(SplashScreenActivity.this, targetActivityClass);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else {
+                                SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("isLoggedIn", false);
+                                editor.apply();
+
+                                Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO NO EXISTE");
+
+                                // Iniciar la actividad apropiada
+                                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
-                        else {
-                            SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean("isLoggedIn", false);
-                            editor.apply();
+                    });
+                }
+                else{
+                    SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("isLoggedIn", false);
+                    editor.apply();
 
-                            Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO NO EXISTE");
+                    Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO NO EXISTE");
 
-                            // Iniciar la actividad apropiada
-                            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-                });
-
+                    // Iniciar la actividad apropiada
+                    Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, SPLASH_SCREEN_DELAY);
     }
