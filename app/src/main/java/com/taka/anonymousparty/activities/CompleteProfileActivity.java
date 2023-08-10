@@ -130,6 +130,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
                     mCircleProfileIcon.setImageResource(R.drawable.ic_person);
                 }
 
+                registerUser();
                 mDialog.dismiss();
             }
 
@@ -141,7 +142,6 @@ public class CompleteProfileActivity extends AppCompatActivity {
         });
     }
 
-
     private void register(){
         String username = mTextInputUserName.getText().toString().trim();
 
@@ -149,11 +149,12 @@ public class CompleteProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "To continue enter a username.", Toast.LENGTH_LONG).show();
         }
         else{
-            registerUser(username);
+            updateUser(username);
         }
     }
 
-    private void registerUser(String username){
+    private void registerUser(){
+        String username = mTextInputUserName.getText().toString().trim();
         String id = mAuthProvider.getUid();
         String email = mAuthProvider.getEmail();
         User user = new User();
@@ -163,17 +164,38 @@ public class CompleteProfileActivity extends AppCompatActivity {
         user.setTimestamp(new Date().getTime());
         user.setImageProfile(mImageUrl);
 
-        mDialog.show();
         mUsersProvider.create(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                }
+                else{
+                    Toast.makeText(CompleteProfileActivity.this, "Failed to store user in database.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void updateUser(String username){
+        String id = mAuthProvider.getUid();
+        User user = new User();
+        user.setId(id);
+        user.setUsername(username);
+        user.setTimestamp(new Date().getTime());
+        user.setImageProfile(mImageUrl);
+
+        mDialog.show();
+        mUsersProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 mDialog.dismiss();
                 if (task.isSuccessful()){
                     Intent intent = new Intent(CompleteProfileActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(CompleteProfileActivity.this, "Failed to store user in database.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CompleteProfileActivity.this, "Failed to store user in database", Toast.LENGTH_SHORT).show();
                 }
             }
         });
