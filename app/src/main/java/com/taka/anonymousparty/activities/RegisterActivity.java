@@ -7,24 +7,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.models.Image;
 import com.taka.anonymousparty.models.User;
@@ -32,11 +35,8 @@ import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,6 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
     AlertDialog mDialog;
     CircleImageView mCircleImageViewBack;
 
+    LinearLayout mLinearLayoutVerificationEmail;
+    TextView mTextViewVerificationEmailTime;
+
     private String mImageUrl;
 
     @Override
@@ -74,6 +77,8 @@ public class RegisterActivity extends AppCompatActivity {
         mTextInputConfirmPassword = findViewById(R.id.textInputConfirmPassword);
         mButtonRegister = findViewById(R.id.btnRegister);
         mCircleImageViewBack = findViewById(R.id.circleImageBack);
+        mLinearLayoutVerificationEmail = findViewById(R.id.linearLayoutVerificationEmail);
+        mTextViewVerificationEmailTime = findViewById(R.id.textViewVerificationEmailTime);
 
         mAuthProvider = new AuthProvider();
         mUsersProvider = new UsersProvider();
@@ -103,6 +108,18 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         selectRandomImage();
+    }
+
+    @Override
+    public void onStop(){
+        finish();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){
+        finish();
+        super.onDestroy();
     }
 
     private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(
@@ -156,6 +173,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+    public boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
     private void register(){
         String username = mTextInputUserName.getText().toString().trim();
@@ -176,52 +199,105 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
         }
         else{
-            createUser(username, email, password);
+            mCircleImageChangePhoto.setEnabled(false);
+            mTextInputUserName.setEnabled(false);
+            mTextInputEmail.setEnabled(false);
+            mTextInputPassword.setEnabled(false);
+            mTextInputConfirmPassword.setEnabled(false);
+            mButtonRegister.setEnabled(false);
+            mCircleImageViewBack.setEnabled(false);
+            mLinearLayoutVerificationEmail.setVisibility(View.VISIBLE);
+
+            // Registra al usuario pero no completa el registro
+            registerUser(username, email, password);
         }
     }
 
-    private void createUser(String username, String email, String password){
-        mDialog.show();
+    private void registerUser(String username, String email, String password){
         mAuthProvider.register(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    String autoId = mAuthProvider.getUid();
-
-                    User newUser = new User();
-                    newUser.setId(autoId);
-                    newUser.setEmail(email);
-                    newUser.setUsername(username);
-                    newUser.setTimestamp(new Date().getTime());
-                    newUser.setImageProfile(mImageUrl);
-
-                    mUsersProvider.create(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    // Envía el correo electrónico de verificación
+                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            mDialog.dismiss();
-                            if (task.isSuccessful()){
-                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                            else{
-                                Toast.makeText(RegisterActivity.this, "No se pudo almacenar el usuario en la base de datos", Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
+                                // Inicia el temporizador de 120 segundos
+                                startTimer(username, email);
+                            } else {
+                                // Maneja el error al enviar el correo electrónico de verificación
                             }
                         }
                     });
                 }
                 else{
-                    mDialog.dismiss();
                     Toast.makeText(RegisterActivity.this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-    public boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+
+    private void startTimer(String username, String email) {
+
+        new CountDownTimer(120000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                // Actualiza el TextView con el tiempo restante
+                mTextViewVerificationEmailTime.setText("" + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                // Verifica si el usuario se ha verificado
+                FirebaseAuth.getInstance().getCurrentUser().reload().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                            // El usuario se ha verificado, completa el registro
+                            completeRegistration(username, email);
+                        } else {
+                            // El usuario no se ha verificado, cancela el registro y vuelve al MainActivity
+                            FirebaseAuth.getInstance().getCurrentUser().delete();
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
+        }.start();
     }
+
+    private void completeRegistration(String username, String email) {
+        String autoId = mAuthProvider.getUid();
+
+        User newUser = new User();
+        newUser.setId(autoId);
+        newUser.setEmail(email);
+        newUser.setUsername(username);
+        newUser.setTimestamp(new Date().getTime());
+        newUser.setImageProfile(mImageUrl);
+
+        mUsersProvider.create(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+
+                    // Guardar el estado de inicio de sesión en SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.apply();
+
+                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(RegisterActivity.this, "No se pudo almacenar el usuario en la base de datos", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
 }
