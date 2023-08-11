@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorPrimary"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <item
+        android:id="@+id/itemSearch"
+        android:title="Search"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_search"
+        app:iconTint="?attr/colorAccent"/>
 
     <item android:id="@+id/itemProfile"
         android:title="Profile"

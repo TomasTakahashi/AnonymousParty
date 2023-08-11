@@ -1,23 +1,34 @@
 package com.taka.anonymousparty.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +51,16 @@ import dmax.dialog.SpotsDialog;
 
 public class HomeActivity extends AppCompatActivity {
     FloatingActionButton mFab;
+
+    View mActionBarView;
     Toolbar mToolbar;
+    Toolbar mToolbarSearch;
+    AppBarLayout mAppbar_toolbar;
+    AppBarLayout mAppbar_search_toolbar;
+    ImageView mImageViewBackSearchToolbar;
+    EditText mEditTextSearchToolbar;
+    ImageView mImageViewClearSearchToolbar;
+
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
     TokenProvider mTokenProvider;
@@ -59,9 +79,17 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mFab = findViewById(R.id.fab);
+
+        mAppbar_toolbar = findViewById(R.id.appbar_toolbar);
+        mAppbar_search_toolbar = findViewById(R.id.appbar_search_toolbar);
+
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chats");;
+
+        mImageViewBackSearchToolbar = findViewById(R.id.imageViewBackSearchToolbar);
+        mEditTextSearchToolbar = findViewById(R.id.editTextSearchToolbar);
+        mImageViewClearSearchToolbar = findViewById(R.id.imageViewClearSearchToolbar);
 
         mRecyclerView = findViewById(R.id.recyclerViewChats);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this);
@@ -73,6 +101,37 @@ public class HomeActivity extends AppCompatActivity {
 
         mTokenProvider = new TokenProvider();
         createToken();
+
+        mImageViewBackSearchToolbar.setOnClickListener(view -> {
+            mAppbar_toolbar.setVisibility(View.VISIBLE);
+            mAppbar_search_toolbar.setVisibility(View.GONE);
+            mEditTextSearchToolbar.setText("");
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mEditTextSearchToolbar.getWindowToken(), 0);
+        });
+
+        mImageViewClearSearchToolbar.setOnClickListener(view -> {
+            mEditTextSearchToolbar.setText("");
+        });
+
+        mEditTextSearchToolbar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    mImageViewClearSearchToolbar.setVisibility(View.VISIBLE);
+                } else {
+                    mImageViewClearSearchToolbar.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +205,10 @@ public class HomeActivity extends AppCompatActivity {
         }
         else if (item.getItemId() == R.id.itemLogout) {
             logout();
+        }
+        else if (item.getItemId() == R.id.itemSearch) {
+            mAppbar_toolbar.setVisibility(View.GONE);
+            mAppbar_search_toolbar.setVisibility(View.VISIBLE);
         }
         return true;
     }
