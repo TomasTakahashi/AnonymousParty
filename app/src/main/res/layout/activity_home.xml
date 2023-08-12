@@ -7,25 +7,30 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.HomeActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:elevation="7dp">
 
-        <include layout="@layout/action_bar_toolbar" />
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mt_hint="Search..."
+            app:mt_hintColor="?attr/colorSecondary"
+            app:mt_searchBarColor="?attr/colorPrimary"
+            app:mt_placeholder="Chats"
+            app:mt_placeholderColor="?attr/colorAccent"
+            app:mt_backIconTint="?attr/colorAccent"
+            app:mt_searchIconTint="?attr/colorAccent"
+            app:mt_menuIconTint="?attr/colorAccent"
+            app:mt_clearIconTint="?attr/colorAccent"
+            app:mt_textColor="?attr/colorAccent"
+            app:mt_leftTextSelectorTint="?attr/colorAccent"
+            />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_search_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-
-        <include layout="@layout/custom_search_toolbar" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChats"

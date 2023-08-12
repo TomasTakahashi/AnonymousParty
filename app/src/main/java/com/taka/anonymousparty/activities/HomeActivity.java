@@ -3,6 +3,7 @@ package com.taka.anonymousparty.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.adapters.ChatsAdapter;
 import com.taka.anonymousparty.models.Chat;
@@ -49,17 +51,10 @@ import java.util.Random;
 import dmax.dialog.SpotsDialog;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener{
     FloatingActionButton mFab;
 
-    View mActionBarView;
-    Toolbar mToolbar;
-    Toolbar mToolbarSearch;
-    AppBarLayout mAppbar_toolbar;
-    AppBarLayout mAppbar_search_toolbar;
-    ImageView mImageViewBackSearchToolbar;
-    EditText mEditTextSearchToolbar;
-    ImageView mImageViewClearSearchToolbar;
+    MaterialSearchBar mSearchBar;
 
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
@@ -80,16 +75,27 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         mFab = findViewById(R.id.fab);
 
-        mAppbar_toolbar = findViewById(R.id.appbar_toolbar);
-        mAppbar_search_toolbar = findViewById(R.id.appbar_search_toolbar);
-
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Chats");;
-
-        mImageViewBackSearchToolbar = findViewById(R.id.imageViewBackSearchToolbar);
-        mEditTextSearchToolbar = findViewById(R.id.editTextSearchToolbar);
-        mImageViewClearSearchToolbar = findViewById(R.id.imageViewClearSearchToolbar);
+        mSearchBar = findViewById(R.id.searchBar);
+        mSearchBar.setOnSearchActionListener(this);
+        mSearchBar.inflateMenu(R.menu.main_menu);
+        mSearchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.itemProfile) {
+                    goToProfile();
+                }
+//        else if (item.getItemId() == R.id.itemSettings) {
+//            goToSettings();
+//        }
+                else if (item.getItemId() == R.id.itemAbout) {
+                    goToAbout();
+                }
+                else if (item.getItemId() == R.id.itemLogout) {
+                    logout();
+                }
+                return true;
+            }
+        });
 
         mRecyclerView = findViewById(R.id.recyclerViewChats);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this);
@@ -101,36 +107,6 @@ public class HomeActivity extends AppCompatActivity {
 
         mTokenProvider = new TokenProvider();
         createToken();
-
-        mImageViewBackSearchToolbar.setOnClickListener(view -> {
-            mAppbar_toolbar.setVisibility(View.VISIBLE);
-            mAppbar_search_toolbar.setVisibility(View.GONE);
-            mEditTextSearchToolbar.setText("");
-
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mEditTextSearchToolbar.getWindowToken(), 0);
-        });
-
-        mImageViewClearSearchToolbar.setOnClickListener(view -> {
-            mEditTextSearchToolbar.setText("");
-        });
-
-        mEditTextSearchToolbar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-                    mImageViewClearSearchToolbar.setVisibility(View.VISIBLE);
-                } else {
-                    mImageViewClearSearchToolbar.setVisibility(View.GONE);
-                }
-            }
-        });
 
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -187,30 +163,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
+    public void onSearchStateChanged(boolean enabled) {
+        String s = enabled ? "enabled" : "disabled";
+        Toast.makeText(HomeActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
     }
-
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.itemProfile) {
-            goToProfile();
-        }
-//        else if (item.getItemId() == R.id.itemSettings) {
-//            goToSettings();
-//        }
-        else if (item.getItemId() == R.id.itemAbout) {
-            goToAbout();
-        }
-        else if (item.getItemId() == R.id.itemLogout) {
-            logout();
-        }
-        else if (item.getItemId() == R.id.itemSearch) {
-            mAppbar_toolbar.setVisibility(View.GONE);
-            mAppbar_search_toolbar.setVisibility(View.VISIBLE);
-        }
-        return true;
+    public void onSearchConfirmed(CharSequence text) {
+
+    }
+    @Override
+    public void onButtonClicked(int buttonCode) {
     }
 
     private void goToProfile() {
@@ -313,5 +275,4 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void createToken(){mTokenProvider.create(mAuthProvider.getUid());}
-
 }
