@@ -24,7 +24,7 @@
                 android:id="@+id/imageIcon"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:src="@drawable/opticdev_gray"
+                android:src="@drawable/icon_transparent"
                 />
 
         <LinearLayout
