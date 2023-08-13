@@ -7,30 +7,13 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.HomeActivity">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:elevation="7dp">
+        android:layout_height="wrap_content">
 
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/searchBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mt_hint="Search..."
-            app:mt_hintColor="?attr/colorSecondary"
-            app:mt_searchBarColor="?attr/colorPrimary"
-            app:mt_placeholder="Chats"
-            app:mt_placeholderColor="?attr/colorAccent"
-            app:mt_backIconTint="?attr/colorAccent"
-            app:mt_searchIconTint="?attr/colorAccent"
-            app:mt_menuIconTint="?attr/colorAccent"
-            app:mt_clearIconTint="?attr/colorAccent"
-            app:mt_textColor="?attr/colorAccent"
-            app:mt_leftTextSelectorTint="?attr/colorAccent"
-            />
+        <include layout="@layout/action_bar_toolbar" />
 
-    </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChats"

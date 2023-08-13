@@ -1,40 +1,27 @@
 package com.taka.anonymousparty.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.adapters.ChatsAdapter;
 import com.taka.anonymousparty.models.Chat;
@@ -51,11 +38,9 @@ import java.util.Random;
 import dmax.dialog.SpotsDialog;
 
 
-public class HomeActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener{
+public class HomeActivity extends AppCompatActivity {
     FloatingActionButton mFab;
-
-    MaterialSearchBar mSearchBar;
-
+    Toolbar mToolbar;
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
     TokenProvider mTokenProvider;
@@ -74,28 +59,9 @@ public class HomeActivity extends AppCompatActivity implements MaterialSearchBar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mFab = findViewById(R.id.fab);
-
-        mSearchBar = findViewById(R.id.searchBar);
-        mSearchBar.setOnSearchActionListener(this);
-        mSearchBar.inflateMenu(R.menu.main_menu);
-        mSearchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.itemProfile) {
-                    goToProfile();
-                }
-//        else if (item.getItemId() == R.id.itemSettings) {
-//            goToSettings();
-//        }
-                else if (item.getItemId() == R.id.itemAbout) {
-                    goToAbout();
-                }
-                else if (item.getItemId() == R.id.itemLogout) {
-                    logout();
-                }
-                return true;
-            }
-        });
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Chats");;
 
         mRecyclerView = findViewById(R.id.recyclerViewChats);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this);
@@ -107,7 +73,6 @@ public class HomeActivity extends AppCompatActivity implements MaterialSearchBar
 
         mTokenProvider = new TokenProvider();
         createToken();
-
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,16 +128,26 @@ public class HomeActivity extends AppCompatActivity implements MaterialSearchBar
     }
 
     @Override
-    public void onSearchStateChanged(boolean enabled) {
-        String s = enabled ? "enabled" : "disabled";
-        Toast.makeText(HomeActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
-    @Override
-    public void onSearchConfirmed(CharSequence text) {
 
-    }
     @Override
-    public void onButtonClicked(int buttonCode) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.itemProfile) {
+            goToProfile();
+        }
+//        else if (item.getItemId() == R.id.itemSettings) {
+//            goToSettings();
+//        }
+        else if (item.getItemId() == R.id.itemAbout) {
+            goToAbout();
+        }
+        else if (item.getItemId() == R.id.itemLogout) {
+            logout();
+        }
+        return true;
     }
 
     private void goToProfile() {
@@ -275,4 +250,5 @@ public class HomeActivity extends AppCompatActivity implements MaterialSearchBar
     }
 
     private void createToken(){mTokenProvider.create(mAuthProvider.getUid());}
+
 }
