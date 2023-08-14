@@ -109,14 +109,20 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
-        super.onStop();
+    public void onResume(){
+        super.onResume();
+        mUsersProvider.updateOnline(true, HomeActivity.this);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
         mUsersProvider.updateOnline(false, HomeActivity.this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
     @Override
