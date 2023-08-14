@@ -5,113 +5,88 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.ProfileActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
+    
+    <include layout="@layout/action_bar_toolbar" />
+    
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="?attr/background"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="58dp">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            >
+            android:gravity="center|fill_vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleProfileIcon"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_person" />
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="?attr/colorPrimary">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageChangePhoto"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignRight="@id/circleProfileIcon"
+                android:layout_alignBottom="@id/circleProfileIcon"
+                android:layout_marginBottom="0dp"
+                android:src="@drawable/ic_camera"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="10dp"
+                app:civ_circle_background_color="#FF000000" />
 
-                </FrameLayout>
+        </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center|fill_vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="27dp"
+            android:layout_marginLeft="15dp"
+            android:gravity="center">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/circleProfileIcon"
-                        android:layout_width="140dp"
-                        android:layout_height="140dp"
-                        android:src="@drawable/ic_person"
-                        app:civ_circle_background_color="?attr/background"
-                        android:layout_marginTop="30dp"
-                        app:civ_border_color="#FF000000"
-                        app:civ_border_width="5dp"
-                        />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameTextInputLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/circleImageChangePhoto"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_alignRight="@id/circleProfileIcon"
-                        android:layout_alignBottom="@id/circleProfileIcon"
-                        android:layout_marginBottom="-10dp"
-                        android:src="@drawable/ic_camera"
-                        app:civ_circle_background_color="#FF000000"/>
-
-                </RelativeLayout>
-
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/usernameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="bottom"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="?attr/colorAccent"
+                    android:textSize="24sp"
+                    android:theme="@style/TextInputEditText"/>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/usernameTextInputLayout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/usernameEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="?attr/colorAccent"
-                            android:textSize="20sp"
-                            android:theme="@style/TextInputEditText"
-                            android:maxLines="1"
-                            android:maxLength="20"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <LinearLayout
-                        android:id="@+id/linearLayoutEditProfile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp">
+            <LinearLayout
+                android:id="@+id/linearLayoutEditProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/usernameTextInputLayout"
+                android:layout_marginLeft="5dp"
+                >
 
-                        <ImageButton
-                            android:id="@+id/editButton"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_edit"/>
+                <ImageButton
+                    android:id="@+id/editButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_edit"/>
 
-                    </LinearLayout>
+            </LinearLayout>
 
-                </LinearLayout>
+        </LinearLayout>
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/circleImageBack"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_arrow_left"
-                    app:civ_circle_background_color="#FF000000"
-                    android:layout_margin="10dp"
-                    android:scaleType="centerCrop"/>
+    </LinearLayout>
 
-            </FrameLayout>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

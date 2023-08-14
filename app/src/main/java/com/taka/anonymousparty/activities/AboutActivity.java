@@ -64,7 +64,7 @@ public class AboutActivity extends AppCompatActivity {
         actionBar.setCustomView(mActionBarView);
         mImageViewBack = mActionBarView.findViewById(R.id.imageViewBack);
         mTextViewTitle = mActionBarView.findViewById(R.id.textViewTitle);
-        mTextViewTitle.setText("ABOUT");
+        mTextViewTitle.setText("About");
 
         mImageViewBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -137,7 +137,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 mDialog.dismiss();
-                Toast.makeText(CompleteProfileActivity.this, "Error al cargar las imágenes", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CompleteProfileActivity.this, "Error loading images", Toast.LENGTH_SHORT).show();
             }
         });
     }

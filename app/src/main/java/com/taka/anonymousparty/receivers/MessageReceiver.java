@@ -148,7 +148,7 @@ public class MessageReceiver extends BroadcastReceiver {
 
             @Override
             public void onFailure(Call<FCMResponse> call, Throwable t) {
-                Log.d("ERROR ONFAILURE", "Error al enviar la notificación: " + t.getMessage());
+                Log.d("ERROR ONFAILURE", "Failed to send notification" + t.getMessage());
             }
         });
     }

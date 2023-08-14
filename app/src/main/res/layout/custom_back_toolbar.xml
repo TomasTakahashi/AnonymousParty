@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Toolbar"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -19,7 +20,7 @@
         android:textSize="20sp"
         android:textColor="?attr/colorAccent"
         android:layout_toRightOf="@id/imageViewBack"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:textStyle="bold"/>
 

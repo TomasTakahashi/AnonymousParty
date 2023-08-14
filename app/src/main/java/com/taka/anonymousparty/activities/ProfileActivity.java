@@ -4,20 +4,25 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -39,10 +44,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private View mActionBarView;
+    private ImageView mImageViewBack;
+    private TextView mTextViewTitle;
+
     private TextInputEditText mTextInputUsername;
     private ImageButton mEditButton;
     private String mPreviousUsername;
-    private CircleImageView mCircleImageViewBack;
     private CircleImageView mCircleProfileIcon;
     private CircleImageView mCircleImageChangePhoto;
     AuthProvider mAuthProvider;
@@ -54,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         //Reconocimiento de objetos
-        mCircleImageViewBack = findViewById(R.id.circleImageBack);
+        showCustomToolbar(R.layout.custom_back_toolbar);
         mCircleProfileIcon = findViewById(R.id.circleProfileIcon);
         mCircleImageChangePhoto = findViewById(R.id.circleImageChangePhoto);
         mTextInputUsername = findViewById(R.id.usernameEditText);
@@ -65,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Inicialmente, deshabilitar el campo de texto y configurar el color del botón
         mTextInputUsername.setEnabled(false);
-        mEditButton.setColorFilter(Color.DKGRAY);
+        mEditButton.setColorFilter(Color.BLACK);
 
         //Display user info
         getUserInfo();
@@ -98,13 +106,13 @@ public class ProfileActivity extends AppCompatActivity {
                     String currentUsername = mTextInputUsername.getText().toString();
                     if (currentUsername.isEmpty()) {
                         mTextInputUsername.setText(mPreviousUsername);
-                        Toast.makeText(ProfileActivity.this, "Campo vacío", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Empty field", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         updateUsername();
                     }
                     mTextInputUsername.setEnabled(false);
-                    mEditButton.setColorFilter(Color.DKGRAY);
+                    mEditButton.setColorFilter(Color.BLACK);
                     mTextInputUsername.setTypeface(null);
                 } else {
                     // User clicked the edit button while the EditText is disabled
@@ -128,13 +136,13 @@ public class ProfileActivity extends AppCompatActivity {
                         String currentUsername = mTextInputUsername.getText().toString();
                         if (currentUsername.isEmpty()) {
                             mTextInputUsername.setText(mPreviousUsername);
-                            Toast.makeText(ProfileActivity.this, "Campo vacío", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, "Empty field", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             updateUsername();
                         }
                         mTextInputUsername.setEnabled(false);
-                        mEditButton.setColorFilter(Color.DKGRAY);
+                        mEditButton.setColorFilter(Color.BLACK);
                         mTextInputUsername.setTypeface(null);
                     }
                 }
@@ -145,13 +153,6 @@ public class ProfileActivity extends AppCompatActivity {
         mCircleImageChangePhoto.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, ImageGridActivity.class);
             imageGridLauncher.launch(intent);
-        });
-
-        mCircleImageViewBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
         });
 
         mUsersProvider.updateOnline(true, ProfileActivity.this);
@@ -177,6 +178,28 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
+    }
+
+    private void showCustomToolbar(int resource) {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("");
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mActionBarView = inflater.inflate(resource, null);
+        actionBar.setCustomView(mActionBarView);
+        mImageViewBack = mActionBarView.findViewById(R.id.imageViewBack);
+        mTextViewTitle = mActionBarView.findViewById(R.id.textViewTitle);
+        mTextViewTitle.setText("Profile");
+
+        mImageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private final ActivityResultLauncher<Intent> imageGridLauncher = registerForActivityResult(

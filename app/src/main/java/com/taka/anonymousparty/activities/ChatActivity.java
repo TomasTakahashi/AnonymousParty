@@ -444,7 +444,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<FCMResponse> call, Throwable t) {
-                Log.d("ERROR ONFAILURE", "Error al enviar la notificación: " + t.getMessage());
+                Log.d("ERROR ONFAILURE", "Failed to send notification: " + t.getMessage());
             }
         });
     }
@@ -467,7 +467,7 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(ChatActivity.this, "El token de notificaciones del usuario no existe", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChatActivity.this, "User's notification token does not exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });

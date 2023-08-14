@@ -172,7 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 mDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, "Error al cargar las imágenes", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Error loading images", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -190,16 +190,16 @@ public class RegisterActivity extends AppCompatActivity {
         String confirmPassword = mTextInputConfirmPassword.getText().toString();
 
         if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Para continuar complete todos los campos", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "To continue complete all fields", Toast.LENGTH_LONG).show();
         }
         else if (!isEmailValid(email)){
-            Toast.makeText(this, "El email ingresado no es correcto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "The email entered is not correct", Toast.LENGTH_LONG).show();
         }
         else if (!password.equals(confirmPassword)){
-            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
         }
         else if (password.length() < 6){
-            Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The password must be at least 6 characters", Toast.LENGTH_SHORT).show();
         }
         else{
             mCircleImageChangePhoto.setEnabled(false);
@@ -230,13 +230,13 @@ public class RegisterActivity extends AppCompatActivity {
                                 startTimer(username, email);
                             } else {
                                 // Maneja el error al enviar el correo electrónico de verificación
-                                Toast.makeText(RegisterActivity.this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Failed to register user", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }
                 else{
-                    Toast.makeText(RegisterActivity.this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Failed to register user", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -253,7 +253,6 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
                             // El usuario se ha verificado, completa el registro
-                            Log.d("CREATEAUTHSTATELISTENER", "VERIFICADO");
                             completeRegistration(username, email);
                         }
                     }
@@ -314,7 +313,7 @@ public class RegisterActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(RegisterActivity.this, "No se pudo almacenar el usuario en la base de datos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Failed to store user in database", Toast.LENGTH_SHORT).show();
                 }
             }
         });

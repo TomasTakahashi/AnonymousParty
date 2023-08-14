@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="BackgroundNight">#222121</color>
+    <color name="BackgroundNight">#121212</color>
     <color name="colorPrimaryNight">#FF000000</color>
-    <color name="colorSecondaryNight">#151414</color>
+    <color name="colorSecondaryNight">#656565</color>
     <color name="contrastNight">#FFFFFFFF</color>
 
     <color name="BackgroundLight">#E3E0E0</color>

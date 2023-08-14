@@ -49,7 +49,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()){
-                                Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO EXISTE");
                                 // Determinar la actividad a iniciar según el estado de inicio de sesión
 
                                 SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
@@ -68,8 +67,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                                 editor.putBoolean("isLoggedIn", false);
                                 editor.apply();
 
-                                Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO NO EXISTE");
-
                                 // Iniciar la actividad apropiada
                                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                                 startActivity(intent);
@@ -83,8 +80,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("isLoggedIn", false);
                     editor.apply();
-
-                    Log.d("-------SPLASH SCREEN ACTIVITY-------", "EL USUARIO NO EXISTE");
 
                     // Iniciar la actividad apropiada
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);

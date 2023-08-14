@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         else {
-            Toast.makeText(this, "Complete email y password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Fill in email and password", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.taka.anonymousparty.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -92,21 +93,18 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         holder.viewHolder.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d("CLICK LARCO","CLICK LARGO");
                 AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogChat);
-                builder.setTitle("ELIMINAR CHAT CON");
-                builder.setMessage("¿Estás seguro de que quieres eliminar este chat?");
+                builder.setTitle("Delete chat");
+                builder.setMessage("Are you sure you want to delete this chat?");
 
-                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Acción a realizar al hacer clic en "Aceptar"
-                        Log.d("CLICK LARCO","" + chatId);
                         deleteChat(chatId);
-
                     }
                 });
 
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
@@ -211,7 +209,9 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                         String imageProfile = documentSnapshot.getString("imageProfile");
                         if (imageProfile != null) {
                             if (!imageProfile.equals("")) {
-                                Glide.with(context).load(imageProfile).into(mCircleProfileIcon);
+                                if (!((Activity) context).isFinishing()) {
+                                    Glide.with(context).load(imageProfile).into(mCircleProfileIcon);
+                                }
                             }
                         }
                         else{
@@ -241,17 +241,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                         String username = documentSnapshot.getString("username");
                         holder.textViewUsername.setText(username);
                     }
-                    if (documentSnapshot.contains("imageProfile")) {
-                        String imageProfile = documentSnapshot.getString("imageProfile");
-                        if (imageProfile != null) {
-                            if (!imageProfile.isEmpty()) {
-                                Glide.with(context).load(imageProfile).into(holder.circleProfileIcon);
-                            }
-                        }
-                        else{
-                            holder.circleProfileIcon.setImageResource(R.drawable.ic_person);
-                        }
-                    }
                 }
             }
         });
@@ -263,22 +252,19 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("ELIMINAR CHAT","SE PUDO");
                         deleteMessageByChat(chatId);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("ELIMINAR CHAT","NO SE PUDO");
+                        Log.d("ERROR ONFAILURE", "Failed delete chat: " + e.getMessage());
                     }
                 });
     }
 
     private void deleteMessageByChat(String chatId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Log.d("ELIMINAR MENSAJES", chatId);
 
         // Consulta para obtener los mensajes con el chatId dado
         Query query = db.collection("Messages").whereEqualTo("idChat", chatId);
@@ -299,14 +285,13 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Log.d("ELIMINAR MENSAJES", "SE PUDIERON ELIMINAR");
                             } else {
-                                Log.d("ELIMINAR MENSAJES", "NO SE PUDIERON ELIMINAR");
+                                Log.d("ERROR TASK ON COMPLETE", "Failed delete message");
                             }
                         }
                     });
                 } else {
-                    Log.d("ELIMINAR MENSAJES", "ERROR AL OBTENER LOS MENSAJES");
+                    Log.d("ERROR TASK ON COMPLETE", "ERROR AL OBTENER LOS MENSAJES");
                 }
             }
         });

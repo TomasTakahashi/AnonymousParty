@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:layout_marginRight="25dp"
-    android:layout_marginLeft="25dp">
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleProfileIcon"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:src="@drawable/ic_person"
         android:layout_centerVertical="true" />
 
@@ -19,9 +19,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textColor="@color/colorPrimaryNight"
+        android:textColor="?attr/colorAccent"
         android:textStyle="bold"
-        android:textSize="16dp"
+        android:textSize="21dp"
+        android:text=""
         android:layout_toEndOf="@id/circleProfileIcon"
         android:layout_marginLeft="20dp"/>
 
@@ -48,6 +49,7 @@
             android:id="@+id/textViewLastMessageChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="220dp"
             android:layout_marginLeft="2dp"
             android:text=""
             android:maxLines="1"
@@ -62,7 +64,7 @@
         android:visibility="gone"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="25dp">
 
         <View
             android:layout_width="30dp"
@@ -74,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"
+            android:textSize="14dp"
             android:layout_gravity="center"/>
 
     </FrameLayout>
@@ -83,7 +86,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12dp"
-        android:text=""
         android:textColor="?attr/colorSecondary"
         android:layout_alignBaseline="@id/textViewUsernameChat"
         android:layout_alignParentEnd="true"
