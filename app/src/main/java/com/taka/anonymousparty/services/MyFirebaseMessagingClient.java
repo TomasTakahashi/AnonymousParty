@@ -132,7 +132,7 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         RemoteInput remoteInput = new RemoteInput.Builder(NOTIFICATION_REPLY).setLabel("Your message...").build();
 
         final NotificationCompat.Action actionReply = new NotificationCompat.Action.Builder(
-                R.mipmap.ic_launcher,
+                R.mipmap.ic_app,
                 "REPLY",
                 pendingIntent)
                 .addRemoteInput(remoteInput)
