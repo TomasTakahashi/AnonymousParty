@@ -61,7 +61,7 @@ public class NotificationHelper extends ContextWrapper{
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setColor(Color.GRAY)
-                .setSmallIcon(R.mipmap.ic_app)
+                .setSmallIcon(R.drawable.icon_transparent)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body).setBigContentTitle(title));
     }
 
@@ -121,7 +121,7 @@ public class NotificationHelper extends ContextWrapper{
         }
 
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_app)
+                .setSmallIcon(R.drawable.icon_transparent)
                 .setStyle(messagingStyle)
                 .addAction(actionReply)
                 .setContentIntent(contentIntent)
