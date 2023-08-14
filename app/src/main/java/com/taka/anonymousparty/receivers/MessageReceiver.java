@@ -37,19 +37,19 @@ import retrofit2.Response;
 
 public class MessageReceiver extends BroadcastReceiver {
 
-    String mExtraUserIdSender;
-    String mExtraUserIdReceiver;
-    String mExtraIdChat;
-    String mExtraUsernameSender;
-    String mExtraUsernameReceiver;
-    String mExtraImageSender;
-    String mExtraImageReceiver;
-    int mExtraIdNotification;
+    private String mExtraUserIdSender;
+    private String mExtraUserIdReceiver;
+    private String mExtraIdChat;
+    private String mExtraUsernameSender;
+    private String mExtraUsernameReceiver;
+    private String mExtraImageSender;
+    private String mExtraImageReceiver;
+    private int mExtraIdNotification;
 
-    TokenProvider mTokenProvider;
-    NotificationProvider mNotificationProvider;
-    ChatsProvider mChatsProvider;
-    MessagesProvider mMessagesProvider;
+    private TokenProvider mTokenProvider;
+    private NotificationProvider mNotificationProvider;
+    private ChatsProvider mChatsProvider;
+    private MessagesProvider mMessagesProvider;
 
     @Override
     public void onReceive(Context context, Intent intent) {

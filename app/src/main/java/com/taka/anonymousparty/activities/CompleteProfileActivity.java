@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,13 +16,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.models.Image;
 import com.taka.anonymousparty.models.User;
@@ -32,21 +29,21 @@ import com.taka.anonymousparty.providers.UsersProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
 public class CompleteProfileActivity extends AppCompatActivity {
-    AuthProvider mAuthProvider;
-    UsersProvider mUsersProvider;
-    private  CircleImageView mCircleProfileIcon;
+    private AuthProvider mAuthProvider;
+    private UsersProvider mUsersProvider;
+
+    private CircleImageView mCircleProfileIcon;
     private CircleImageView mCircleImageChangePhoto;
     private TextInputEditText mTextInputUserName;
     private Button mButtonRegister;
+
     private AlertDialog mDialog;
 
     private String mImageUrl;
@@ -63,7 +60,6 @@ public class CompleteProfileActivity extends AppCompatActivity {
 
         mAuthProvider = new AuthProvider();
         mUsersProvider = new UsersProvider();
-
 
         mTextInputUserName.setText("Anónimo");
 
@@ -122,14 +118,10 @@ public class CompleteProfileActivity extends AppCompatActivity {
                     Random random = new Random();
                     int randomIndex = random.nextInt(imageUrls.size());
                     mImageUrl = imageUrls.get(randomIndex);
-
-                    // Cargar la imagen seleccionada aleatoriamente en mCircleProfileIcon
                     Glide.with(CompleteProfileActivity.this).load(mImageUrl).into(mCircleProfileIcon);
                 } else {
-                    // Si no hay imágenes disponibles, puedes establecer una imagen predeterminada aquí
                     mCircleProfileIcon.setImageResource(R.drawable.ic_person);
                 }
-
                 registerUser();
                 mDialog.dismiss();
             }

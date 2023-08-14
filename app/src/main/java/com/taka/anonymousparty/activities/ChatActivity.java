@@ -62,39 +62,38 @@ import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
 
-    String mExtraIdUser1;
-    String mExtraIdUser2;
-    String mExtraIdChat;
+    private String mExtraIdUser1;
+    private String mExtraIdUser2;
+    private String mExtraIdChat;
     int mIdNotificationChat;
 
-    AuthProvider mAuthProvider;
-    UsersProvider mUsersProvider;
-    ChatsProvider mChatsProvider;
-    MessagesProvider mMessagesProvider;
-    NotificationProvider mNotificationProvider;
-    TokenProvider mTokenProvider;
+    private AuthProvider mAuthProvider;
+    private UsersProvider mUsersProvider;
+    private ChatsProvider mChatsProvider;
+    private MessagesProvider mMessagesProvider;
+    private NotificationProvider mNotificationProvider;
+    private TokenProvider mTokenProvider;
 
-    MessagesAdapter mMessagesAdapter;
+    private MessagesAdapter mMessagesAdapter;
 
-    EditText mEditTextMessage;
-    ImageView mImageViewSendMessage;
 
-    CircleImageView mCircleImageProfile;
-    TextView mTextViewUsername;
-    TextView mTextViewRelativeTime;
-    ImageView mImageViewBack;
-    RecyclerView mRecyclerViewMessage;
+    private View mActionBarView;
+    private EditText mEditTextMessage;
+    private ImageView mImageViewSendMessage;
+    private CircleImageView mCircleImageProfile;
+    private TextView mTextViewUsername;
+    private TextView mTextViewRelativeTime;
+    private ImageView mImageViewBack;
+    private RecyclerView mRecyclerViewMessage;
 
-    LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManager mLinearLayoutManager;
 
-    ListenerRegistration mListener;
+    private ListenerRegistration mListener;
 
-    View mActionBarView;
-
-    String mMyUsername;
-    String mUsernameReceiver;
-    String mImageReceiver = "";
-    String mImageSender = "";
+    private String mMyUsername;
+    private String mUsernameReceiver;
+    private String mImageReceiver = "";
+    private String mImageSender = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +136,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 int lineCount = mEditTextMessage.getLineCount();
-                int maxLines = 6; // Máximo de 6 líneas permitidas
+                int maxLines = 6;
                 mEditTextMessage.setMaxLines(Math.min(lineCount, maxLines));
             }
         });
@@ -192,7 +191,6 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
-        //mUsersProvider.updateOnline(false, ChatActivity.this);
         mMessagesAdapter.stopListening();
     }
 
@@ -205,7 +203,6 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        //mUsersProvider.updateOnline(false, ChatActivity.this);
         if (mListener != null){
             mListener.remove();
         }
@@ -425,8 +422,6 @@ public class ChatActivity extends AppCompatActivity {
 
         data.put("imageSender", mImageSender);
         data.put("imageReceiver", mImageReceiver);
-
-
 
         FCMBody body = new FCMBody(token, "high", "4500s", data);
         mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {

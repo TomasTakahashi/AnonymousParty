@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class MessagesProvider {
 
-    CollectionReference mCollection;
+    private CollectionReference mCollection;
 
     public MessagesProvider() {
         mCollection = FirebaseFirestore.getInstance().collection("Messages");

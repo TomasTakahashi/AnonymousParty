@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
@@ -30,9 +29,9 @@ public class ImageGridActivity extends AppCompatActivity {
     private GridView gridView;
     private ArrayList<Image> dataList;
     private ImageAdapter adapter;
-    View mActionBarView;
-    ImageView mImageViewBack;
-    TextView mTextViewTitle;
+    private View mActionBarView;
+    private ImageView mImageViewBack;
+    private TextView mTextViewTitle;
     final private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Images");
 
     @Override

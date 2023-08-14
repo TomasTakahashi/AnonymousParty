@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ImageAdapter extends BaseAdapter {
     private ArrayList<Image> dataList;
     private Context context;
-    LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
 
     public ImageAdapter(Context context, ArrayList<Image> dataList) {
         this.context = context;
@@ -57,7 +57,6 @@ public class ImageAdapter extends BaseAdapter {
                 ((Activity) context).finish(); // Finaliza la actividad para volver a ProfileActivity
             }
         });
-
 
         return view;
     }

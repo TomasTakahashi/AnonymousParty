@@ -10,7 +10,7 @@ import com.taka.anonymousparty.models.Token;
 
 public class TokenProvider {
 
-    CollectionReference mCollectionToken;
+    private CollectionReference mCollectionToken;
 
     public TokenProvider(){
         mCollectionToken = FirebaseFirestore.getInstance().collection("Tokens");

@@ -44,7 +44,6 @@ public class RelativeTime extends Application {
         }
     }
 
-
     public static String timeFormatAMPM(long time, Context ctx) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");

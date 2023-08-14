@@ -28,39 +28,30 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.taka.anonymousparty.R;
-import com.taka.anonymousparty.models.User;
 import com.taka.anonymousparty.providers.AuthProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView mTextViewRegister;
-    TextInputEditText mTextInputEmail;
-    TextInputEditText mTextInputPassword;
-    Button mButtonLogin;
-    AuthProvider mAuthProvider;
-    SignInButton mButtonLoginGoogle;
-    AlertDialog mDialog;
+    private AuthProvider mAuthProvider;
+    private UsersProvider mUsersProvider;
+
+    private TextView mTextViewRegister;
+    private TextInputEditText mTextInputEmail;
+    private TextInputEditText mTextInputPassword;
+    private Button mButtonLogin;
+    private SignInButton mButtonLoginGoogle;
+    private AlertDialog mDialog;
 
     //GOOGLE SIGN IN
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
-    UsersProvider mUsersProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                             firebaseAuthWithGoogle(account);
                         } catch (ApiException e) {
-                            // Google Sign In failed, update UI appropriately
                             Log.w(TAG, "Google sign in failed", e);
                         }
                     }

@@ -15,11 +15,11 @@ import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.providers.UsersProvider;
 
 public class AboutActivity extends AppCompatActivity {
-    UsersProvider mUsersProvider;
+    private UsersProvider mUsersProvider;
 
-    View mActionBarView;
-    ImageView mImageViewBack;
-    TextView mTextViewTitle;
+    private View mActionBarView;
+    private ImageView mImageViewBack;
+    private TextView mTextViewTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

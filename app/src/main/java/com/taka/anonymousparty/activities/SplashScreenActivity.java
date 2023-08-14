@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -22,20 +21,18 @@ import com.taka.anonymousparty.providers.UsersProvider;
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final long SPLASH_SCREEN_DELAY = 500;
-    UsersProvider mUsersProvider;
+    private UsersProvider mUsersProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Inflar el diseño de la pantalla de inicio personalizada si es necesario
-        setContentView(R.layout.activity_splash_screen); // Cambia por el nombre de tu diseño
+        setContentView(R.layout.activity_splash_screen);
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_splash_screen);
         ImageView imageView = findViewById(R.id.imageIcon);
         imageView.startAnimation(animation);
 
-        // Crear un Handler para realizar el retraso
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -49,14 +46,13 @@ public class SplashScreenActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()){
-                                // Determinar la actividad a iniciar según el estado de inicio de sesión
-
+                                // Se determinar la actividad a iniciar según el estado de inicio de sesión
                                 SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
                                 boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
                                 Class<?> targetActivityClass = isLoggedIn ? HomeActivity.class : MainActivity.class;
 
-                                // Iniciar la actividad apropiada
+                                // Iniciar la actividad correspondiente
                                 Intent intent = new Intent(SplashScreenActivity.this, targetActivityClass);
                                 startActivity(intent);
                                 finish();
@@ -67,7 +63,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                                 editor.putBoolean("isLoggedIn", false);
                                 editor.apply();
 
-                                // Iniciar la actividad apropiada
+                                // Iniciar la actividad correspondiente
                                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -81,7 +77,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     editor.putBoolean("isLoggedIn", false);
                     editor.apply();
 
-                    // Iniciar la actividad apropiada
+                    // Iniciar la actividad correspondiente
                     Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -89,5 +85,4 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         }, SPLASH_SCREEN_DELAY);
     }
-
 }

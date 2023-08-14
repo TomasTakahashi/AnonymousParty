@@ -4,23 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,7 +34,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.activities.ChatActivity;
-import com.taka.anonymousparty.activities.HomeActivity;
 import com.taka.anonymousparty.models.Chat;
 import com.taka.anonymousparty.models.Message;
 import com.taka.anonymousparty.providers.AuthProvider;
@@ -55,12 +48,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.ViewHolder> {
 
-    Context context;
-    UsersProvider mUsersProvider;
-    AuthProvider mAuthProvider;
-    ChatsProvider mChatsProvider;
-    MessagesProvider mMessagesProvider;
-    ListenerRegistration mListener;
+    private Context context;
+    private UsersProvider mUsersProvider;
+    private AuthProvider mAuthProvider;
+    private ChatsProvider mChatsProvider;
+    private MessagesProvider mMessagesProvider;
+    private ListenerRegistration mListener;
 
     public ChatsAdapter(FirestoreRecyclerOptions<Chat> options, Context context) {
         super(options);
@@ -99,7 +92,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
 
                 builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Acción a realizar al hacer clic en "Aceptar"
                         deleteChat(chatId);
                     }
                 });
@@ -128,7 +120,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
         getLastMessage(chatId, holder.textViewLastMessage, holder.imageViewViewed);
         getDateLastMessage(chatId, holder.textViewDateLastMessage);
         getMessageNotRead(chatId, idSender, holder.textViewMessageNotRead, holder.mFrameLayoutMessageNotRead);
-
     }
 
     public ListenerRegistration getListener(){
@@ -266,7 +257,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
     private void deleteMessageByChat(String chatId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Consulta para obtener los mensajes con el chatId dado
         Query query = db.collection("Messages").whereEqualTo("idChat", chatId);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -296,7 +286,6 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             }
         });
     }
-
 
     @NonNull
     @Override

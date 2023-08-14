@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -24,7 +23,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,21 +46,23 @@ import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private  CircleImageView mCircleProfileIcon;
-    private CircleImageView mCircleImageChangePhoto;
-    private String mImageUrl;
-    TextInputEditText mTextInputUserName;
-    TextInputEditText mTextInputEmail;
-    TextInputEditText mTextInputPassword;
-    TextInputEditText mTextInputConfirmPassword;
-    Button mButtonRegister;
-    AuthProvider mAuthProvider;
-    UsersProvider mUsersProvider;
-    AlertDialog mDialog;
-    CircleImageView mCircleImageViewBack;
+    private AuthProvider mAuthProvider;
+    private UsersProvider mUsersProvider;
 
-    LinearLayout mLinearLayoutVerificationEmail;
-    TextView mTextViewVerificationEmailTime;
+    private CircleImageView mCircleProfileIcon;
+    private CircleImageView mCircleImageChangePhoto;
+    private TextInputEditText mTextInputUserName;
+    private TextInputEditText mTextInputEmail;
+    private TextInputEditText mTextInputPassword;
+    private TextInputEditText mTextInputConfirmPassword;
+    private Button mButtonRegister;
+    private CircleImageView mCircleImageViewBack;
+    private LinearLayout mLinearLayoutVerificationEmail;
+    private TextView mTextViewVerificationEmailTime;
+
+    private String mImageUrl;
+
+    private AlertDialog mDialog;
 
     private CountDownTimer mCountDownTimer;
 
@@ -70,7 +70,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
 
         mCircleProfileIcon = findViewById(R.id.circleProfileIcon);
         mCircleImageChangePhoto = findViewById(R.id.circleImageChangePhoto);
@@ -158,11 +157,8 @@ public class RegisterActivity extends AppCompatActivity {
                     Random random = new Random();
                     int randomIndex = random.nextInt(imageUrls.size());
                     mImageUrl = imageUrls.get(randomIndex);
-
-                    // Cargar la imagen seleccionada aleatoriamente en mCircleProfileIcon
                     Glide.with(RegisterActivity.this).load(mImageUrl).into(mCircleProfileIcon);
                 } else {
-                    // Si no hay imágenes disponibles, puedes establecer una imagen predeterminada aquí
                     mCircleProfileIcon.setImageResource(R.drawable.ic_person);
                 }
 
@@ -211,7 +207,6 @@ public class RegisterActivity extends AppCompatActivity {
             mCircleImageViewBack.setEnabled(false);
             mLinearLayoutVerificationEmail.setVisibility(View.VISIBLE);
 
-            // Registra al usuario pero no completa el registro
             registerUser(username, email, password);
         }
     }
@@ -221,15 +216,12 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    // Envía el correo electrónico de verificación
                     FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                // Inicia el temporizador de 120 segundos
                                 startTimer(username, email);
                             } else {
-                                // Maneja el error al enviar el correo electrónico de verificación
                                 Toast.makeText(RegisterActivity.this, "Failed to register user", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -252,23 +244,18 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                            // El usuario se ha verificado, completa el registro
                             completeRegistration(username, email);
                         }
                     }
                 });
             }
-
             public void onFinish() {
-                // Verifica si el usuario se ha verificado
                 FirebaseAuth.getInstance().getCurrentUser().reload().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                            // El usuario se ha verificado, completa el registro
                             completeRegistration(username, email);
                         } else {
-                            // El usuario no se ha verificado, cancela el registro y vuelve al MainActivity
                             FirebaseAuth.getInstance().getCurrentUser().delete();
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

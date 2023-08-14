@@ -1,9 +1,5 @@
 package com.taka.anonymousparty.models;
 
-import com.google.firebase.firestore.CollectionReference;
-
-import java.util.ArrayList;
-
 public class User {
 
     private String id;

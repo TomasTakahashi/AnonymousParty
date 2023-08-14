@@ -37,17 +37,18 @@ import java.util.Random;
 
 import dmax.dialog.SpotsDialog;
 
-
 public class HomeActivity extends AppCompatActivity {
-    FloatingActionButton mFab;
-    Toolbar mToolbar;
-    UsersProvider mUsersProvider;
-    AuthProvider mAuthProvider;
-    TokenProvider mTokenProvider;
-    ChatsProvider mChatsProvider;
-    ChatsAdapter mChatsAdapter;
-    RecyclerView mRecyclerView;
-    AlertDialog mDialog;
+
+    private UsersProvider mUsersProvider;
+    private AuthProvider mAuthProvider;
+    private TokenProvider mTokenProvider;
+    private ChatsProvider mChatsProvider;
+    private ChatsAdapter mChatsAdapter;
+    private RecyclerView mRecyclerView;
+    private AlertDialog mDialog;
+
+    private FloatingActionButton mFab;
+    private Toolbar mToolbar;
 
     private static final int MAX_ATTEMPTS = 30;
     private int attemptCount = 0;
@@ -202,7 +203,6 @@ public class HomeActivity extends AppCompatActivity {
                     mChatsProvider.checkIfChatExists(myId, randomUserId, new ChatExistsCallback() {
                         public void onChatExists(boolean exists) {
                             if (!exists && !myId.equals(randomUserId)) {
-                                // El chat no existe y los id no son iguales
                                 createChat(myId, randomUserId);
                                 Intent intent = new Intent(HomeActivity.this, ChatActivity.class);
                                 intent.putExtra("idUser1", myId);
@@ -214,14 +214,12 @@ public class HomeActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 return;
                             } else {
-                                // El chat ya existe o los id son iguales
                                 attemptCount++;
                                 getRandomUserAndCheckChatExists(myId, collectionUsers);
                             }
                         }
                     });
                 } else {
-                    // Manejo de errores cuando ocurre un fallo
                     mDialog.dismiss();
                     Toast.makeText(HomeActivity.this, "It is not possible to create a chat at this time", Toast.LENGTH_SHORT).show();
                     return;

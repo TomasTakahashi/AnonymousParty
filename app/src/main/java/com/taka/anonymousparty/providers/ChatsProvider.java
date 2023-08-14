@@ -1,27 +1,22 @@
 package com.taka.anonymousparty.providers;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.models.Chat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ChatsProvider {
 
-    CollectionReference mCollectionChats;
+    private CollectionReference mCollectionChats;
 
     public ChatsProvider(){
         mCollectionChats = FirebaseFirestore.getInstance().collection("Chats");
@@ -32,7 +27,6 @@ public class ChatsProvider {
     }
 
     public Query getAll(String idUser){
-//        return mCollectionChats.whereArrayContains("idsUsers", idUser);
         return mCollectionChats.whereArrayContains("idsUsers", idUser).orderBy("lastMessageTime", Query.Direction.DESCENDING);
     }
 

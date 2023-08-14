@@ -3,7 +3,6 @@ package com.taka.anonymousparty.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +27,9 @@ import com.taka.anonymousparty.utils.RelativeTime;
 
 public class MessagesAdapter extends FirestoreRecyclerAdapter<Message, MessagesAdapter.ViewHolder> {
 
-    Context context;
-    UsersProvider mUsersProvider;
-    AuthProvider mAuthProvider;
+    private Context context;
+    private UsersProvider mUsersProvider;
+    private AuthProvider mAuthProvider;
 
     public MessagesAdapter(FirestoreRecyclerOptions<Message> options, Context context) {
         super(options);
