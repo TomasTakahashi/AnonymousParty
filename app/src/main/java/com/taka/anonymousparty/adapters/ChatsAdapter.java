@@ -1,12 +1,16 @@
 package com.taka.anonymousparty.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,19 +18,25 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.taka.anonymousparty.R;
 import com.taka.anonymousparty.activities.ChatActivity;
 import com.taka.anonymousparty.activities.HomeActivity;
@@ -37,6 +47,8 @@ import com.taka.anonymousparty.providers.ChatsProvider;
 import com.taka.anonymousparty.providers.MessagesProvider;
 import com.taka.anonymousparty.providers.UsersProvider;
 import com.taka.anonymousparty.utils.RelativeTime;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -76,6 +88,36 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
                 goToChatActivity(chatId, chat.getIdUser1(), chat.getIdUser2(), chat.getIdNotificationChat());
             }
         });
+
+        holder.viewHolder.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d("CLICK LARCO","CLICK LARGO");
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogChat);
+                builder.setTitle("ELIMINAR CHAT CON");
+                builder.setMessage("¿Estás seguro de que quieres eliminar este chat?");
+
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Acción a realizar al hacer clic en "Aceptar"
+                        Log.d("CLICK LARCO","" + chatId);
+                        deleteChat(chatId);
+
+                    }
+                });
+
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return true;
+            }
+        });
+
         String idSender = "";
         if (mAuthProvider.getUid().equals(chat.getIdUser1())){
             idSender = chat.getIdUser2();
@@ -214,6 +256,62 @@ public class ChatsAdapter extends FirestoreRecyclerAdapter<Chat, ChatsAdapter.Vi
             }
         });
     }
+
+    private void deleteChat(String chatId){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Chats").document(chatId).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ELIMINAR CHAT","SE PUDO");
+                        deleteMessageByChat(chatId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("ELIMINAR CHAT","NO SE PUDO");
+                    }
+                });
+    }
+
+    private void deleteMessageByChat(String chatId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Log.d("ELIMINAR MENSAJES", chatId);
+
+        // Consulta para obtener los mensajes con el chatId dado
+        Query query = db.collection("Messages").whereEqualTo("idChat", chatId);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                    // Eliminar los documentos de Messages con el chatId dado
+                    WriteBatch batch = db.batch();
+                    for (DocumentSnapshot document : documents) {
+                        batch.delete(document.getReference());
+                    }
+
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("ELIMINAR MENSAJES", "SE PUDIERON ELIMINAR");
+                            } else {
+                                Log.d("ELIMINAR MENSAJES", "NO SE PUDIERON ELIMINAR");
+                            }
+                        }
+                    });
+                } else {
+                    Log.d("ELIMINAR MENSAJES", "ERROR AL OBTENER LOS MENSAJES");
+                }
+            }
+        });
+    }
+
 
     @NonNull
     @Override

@@ -24,5 +24,15 @@
         <item name="DialogSpotCount">4</item>
     </style>
 
+    <style name="AlertDialogChat" parent="android:Theme.DeviceDefault.Dialog.Alert">
+        <item name="colorPrimary">?attr/colorAccent</item>
+        <item name="android:colorBackground">?attr/backgroundColor</item>
+        <item name="android:textColorPrimary">?attr/colorAccent</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingStart">2dp</item>
+    </style>
+
 
 </resources>

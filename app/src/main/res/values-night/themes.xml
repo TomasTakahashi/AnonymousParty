@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimaryNight</item>
         <item name="colorSecondary">@color/colorSecondaryNight</item>
         <item name="background">@color/BackgroundNight</item>
+        <item name="backgroundColor">@color/colorPrimaryNight</item>
         <item name="android:windowBackground">@color/BackgroundNight</item>
         <item name="colorAccent">@color/contrastNight</item>
         <item name="android:textColor">@color/contrastNight</item>
