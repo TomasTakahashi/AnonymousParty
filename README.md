@@ -3,14 +3,14 @@
 
 ----------
 
-<img src="/art/preview.gif" width="400">
+<img src="/art/Video app.gif" width="400">
 
 ----------
 
 Splash screen
 
-<img src="/art/SplashScreen-Light.jpg" width="300">
-<img src="/art/SplashScreen-Dark.jpg" width="300">
+<img src="/art/SplashScreen-Light.jpg" width="300"> <img src="/art/SplashScreen-Dark.jpg" width="300">
+
 
 
 Inicio de sesión
