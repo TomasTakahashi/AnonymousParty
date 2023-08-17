@@ -18,12 +18,14 @@
 
 
 **Registro por email**
+
 Es necesario verificar el email.
 
 <img src="/art/RegistrationByEmail-Light.jpg" width="300"> <img src="/art/RegistrationByEmail-Dark.jpg" width="300">
 
 
 **Completar perfil**
+
 En caso de querer iniciar sesión con Google y sea la primera vez, aparecerá esta pantalla. 
 
 <img src="/art/CompleteProfile-Light.jpg" width="300"> <img src="/art/CompleteProfile-Dark.jpg" width="300">
